@@ -22,6 +22,8 @@ namespace AgenciaDeViajes
         public List<Hotel> HotelesVisitados { get; set; }
         public List<Vuelo> VuelosTomados { get; set; }
 
+
+        //Constructor vacio
         public Usuario()
         {
             IntentosFallidos = 0;
@@ -34,7 +36,7 @@ namespace AgenciaDeViajes
         }
 
         // Constructores con parámetros
-         public Usuario(int id, int dni, string nombre, string apellido, string mail)
+        public Usuario(int id, int dni, string nombre, string apellido, string mail)
         {
             ID = id;
             DNI = dni;

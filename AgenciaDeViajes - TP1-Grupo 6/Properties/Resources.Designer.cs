@@ -31,9 +31,7 @@ namespace AgenciaDeViajes.Properties {
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-
-        public static string ConnectionStr { get; internal set; }
-
+        
         /// <summary>
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
@@ -59,6 +57,15 @@ namespace AgenciaDeViajes.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Data Source=localhost;Initial Catalog=AgenciaDeViajes-Grupo6;Persist Security Info=True;User ID=AppAgencia;Password=Administrador;TrustServerCertificate=True.
+        /// </summary>
+        internal static string ConnectionString {
+            get {
+                return ResourceManager.GetString("ConnectionString", resourceCulture);
             }
         }
     }

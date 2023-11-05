@@ -12,7 +12,14 @@ namespace AgenciaDeViajes
         public string Nombre { get; set; }
         public List<Vuelo> Vuelos { get; private set; }
         public List<Hotel> Hoteles { get; private set; }
+        
+        //Constructor vacio
+        public Ciudad()
+        {
 
+        }
+        
+        //Constructor con parámetros
         public Ciudad(int id, string nombre)
         {
             ID = id;

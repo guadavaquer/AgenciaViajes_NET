@@ -14,7 +14,7 @@ namespace AgenciaDeViajes
         private string connectionString;
         public DAL()
         {
-            connectionString = Properties.Resources.ConnectionStr;
+            connectionString = Properties.Resources.ConnectionString;
         }
 
         //Métodos clase Usuario

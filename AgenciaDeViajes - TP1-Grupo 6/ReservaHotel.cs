@@ -14,6 +14,13 @@ namespace AgenciaDeViajes
         public DateTime FechaHasta { get; set; }
         public double Pagado { get; set; }
 
+        //Constructor vacio
+        public ReservaHotel()
+        {
+
+        }
+
+        //Constructor con parámetros
         public ReservaHotel(Hotel miHotel, Usuario miUsuario, DateTime fechaDesde, DateTime fechaHasta, double pagado)
         {
             MiHotel = miHotel ?? throw new ArgumentNullException(nameof(miHotel), "El hotel no puede ser null.");

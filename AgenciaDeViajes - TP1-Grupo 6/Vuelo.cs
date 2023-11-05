@@ -20,7 +20,13 @@ namespace AgenciaDeViajes
         public List<Usuario> Pasajeros { get; private set; }
         public List<ReservaVuelo> MisReservas { get; private set; }
 
-        // Constructor
+        //Constructor vacio
+        public Vuelo()
+        {
+
+        }
+
+        //Constructor con parámetros
         public Vuelo(int id, int capacidad, int vendido, double costo, DateTime fecha, string aerolinea, string avion, Ciudad origen, Ciudad destino)
         {
             if (id <= 0) throw new ArgumentException("ID no puede estar vacio o ser menor o igual a 0.");

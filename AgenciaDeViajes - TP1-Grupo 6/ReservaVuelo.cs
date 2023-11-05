@@ -11,5 +11,12 @@ namespace AgenciaDeViajes
         public Vuelo MiVuelo { get; set; }
         public Usuario MiUsuario { get; set; }
         public double Pagado { get; set; }
+
+        //Constructor vacio
+        public ReservaVuelo()
+        {
+
+        }
     }
+
 }
