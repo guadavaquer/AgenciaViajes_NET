@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -96,7 +97,7 @@ namespace AgenciaDeViajes
             return usuario;
         }
 
-        public bool insertUsuario(Usuario usuario)
+        public bool insertUsuario(Usuario String no)
         {
             // Definir la cadena de consulta para la actualización
             string queryString = "INSERT Usuario(Dni,Nombre,Apellido,Mail,Password,IntentosFallidos,Bloqueado,Credito,EsAdmin) VALUES " +
@@ -620,4 +621,4 @@ namespace AgenciaDeViajes
         }
 
     }
-}
+}*/

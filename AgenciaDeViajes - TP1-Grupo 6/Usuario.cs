@@ -59,5 +59,20 @@ namespace AgenciaDeViajes
             Credito = credito;
             EsAdmin = esAdmin;
         }
+
+        public Usuario(int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
+        {
+            DNI = dni;
+            Nombre = nombre;
+            Apellido = apellido;
+            Mail = mail;
+            Password = password;
+            EsAdmin = esAdmin;
+        }
+
+        internal void cerrar()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace AgenciaDeViajes
     public partial class Form1 : Form
     {
         private Agencia agenciaDeViajes;
+        private Usuario usuarios;
         private IniciarSesion formInicioSesion;
         private Registrarse formRegistro;
         private AdminForm adminForm;
@@ -16,6 +17,7 @@ namespace AgenciaDeViajes
             InitializeComponent();
 
             agenciaDeViajes = new Agencia();
+            usuarios = new Usuario();
             formInicioSesion = new IniciarSesion(agenciaDeViajes);
             formInicioSesion.MdiParent = this;
             formInicioSesion.TransfPrincipal += TransfPrincipal;

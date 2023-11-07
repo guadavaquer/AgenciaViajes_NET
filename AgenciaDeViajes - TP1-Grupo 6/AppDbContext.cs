@@ -9,10 +9,15 @@ namespace AgenciaDeViajes
 {
     public class AppDbContext : DbContext
     {
+        //DbSet es un data set
+        public DbSet<Ciudad> ciudades { get; set; }
+        public DbSet<Hotel> hoteles { get; set; }
+        public DbSet<ReservaHotel> reservaHoteles { get; set; }
+        public DbSet<ReservaVuelo> reservaVuelos { get; set; }
         public DbSet<Usuario> usuarios { get; set; }
-        public DbSet<Vuelo> Vuelos { get; set; }
-        public DbSet<Hotel> Hoteles { get; set; }
-
+        public DbSet<Vuelo> vuelos { get; set; }
+        
+        //Constructor sin parámetros de la clase AppDbContext
         public AppDbContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
@@ -23,11 +28,40 @@ namespace AgenciaDeViajes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Nombre de la tabla
-            modelBuilder.Entity<Usuario>()
+            modelBuilder.Entity<Ciudad>()
+               .ToTable("Ciudades")
+               .HasKey(c => c.ID);
+
+            modelBuilder.Entity<Hotel>()
+                .ToTable("Hoteles")
+                .HasKey(h => h.ID);
+
+           /* modelBuilder.Entity<ReservaHotel>()
+               .ToTable("ReservaHoteles")
+               .HasKey(rh => rh.ID); 
+
+            modelBuilder.Entity<ReservaVuelo>()
+              .ToTable("ReservaVuelos")
+              .HasKey(rv => rv.ID); */
+
+            modelBuilder.Entity<Usuario>() 
                 .ToTable("Usuarios")
                 .HasKey(u => u.ID);
 
+            modelBuilder.Entity<Vuelo>()
+                .ToTable("Vuelos")
+                .HasKey(v => v.ID);
+
             //Propiedades de los datos
+
+            modelBuilder.Entity<Ciudad>();
+
+            modelBuilder.Entity<Hotel>();
+
+            modelBuilder.Entity<ReservaHotel>();
+
+            modelBuilder.Entity<ReservaVuelo>();
+
             modelBuilder.Entity<Usuario>(
                 usr =>
                 {
@@ -35,12 +69,10 @@ namespace AgenciaDeViajes
                     usr.Property(u => u.DNI).IsRequired(true);
                 });
 
+            modelBuilder.Entity<Vuelo>();
+
             modelBuilder.Ignore<Agencia>();
-            modelBuilder.Ignore<Ciudad>();
-            modelBuilder.Ignore<Hotel>();
-            modelBuilder.Ignore<Vuelo>();
-            modelBuilder.Ignore<ReservaHotel>();
-            modelBuilder.Ignore<ReservaVuelo>();
+           
         }
     }
 }

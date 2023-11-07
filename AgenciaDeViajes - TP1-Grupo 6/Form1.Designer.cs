@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+            usuarios.cerrar();
             base.Dispose(disposing);
         }
 

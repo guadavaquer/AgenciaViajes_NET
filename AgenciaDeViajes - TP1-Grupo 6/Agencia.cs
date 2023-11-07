@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +9,136 @@ namespace AgenciaDeViajes
 {
     public class Agencia
     {
-        private List<Usuario> usuarios;
+        //Sólo la clase lógica maneja la variable contexto y no va a haber más de una instancia
+        private AppDbContext contexto;
+
+        public Agencia()
+        {
+            //Select * de cada una de las entidades
+            inicializarAtributos();
+        }
+
+        private void inicializarAtributos()
+        {
+            try
+            {
+                //Creo un contexto
+                contexto = new AppDbContext();
+
+                //Cargo las entidades y las trae a memoria
+                contexto.ciudades.Load();
+                contexto.hoteles.Load();
+                contexto.reservaHoteles.Load();
+                contexto.reservaVuelos.Load();
+                contexto.usuarios.Load();
+                contexto.vuelos.Load();
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        public List<Usuario> obtenerUsuarios()
+        {
+            //DbSet de usuarios
+            return contexto.usuarios.ToList();
+        }
+        public List<Usuario> usuariosAdministradores()
+        {
+            List<Usuario> salida = new List<Usuario>();
+
+            //Se muestra solo hacia la vista
+            foreach (Usuario u in contexto.usuarios)
+                if (u.EsAdmin)
+                    salida.Add(u);
+            return salida;
+        }
+
+        //Métodos de la clase Usuario
+
+        //Agregar usuario
+        public bool AgregarUsuario(int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
+        {
+            try
+            {
+                Usuario nuevo = new Usuario(dni, nombre, apellido, mail, password, esAdmin);
+                //Se agrega en la copia local
+                contexto.usuarios.Add(nuevo);
+                //Los cambios se guardan en la base de datos
+                contexto.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        //Modificar usuario
+        public bool ModificarUsuarios(int usuarioId, string nombre, string apellido, int DNI, string mail, bool esAdmin, bool bloqueado)
+        {
+            bool salida = false;
+            foreach(Usuario u in contexto.usuarios)
+                if(u.ID == usuarioId)
+                {
+                    u.Nombre = nombre;
+                    u.Apellido = apellido;
+                    u.DNI = DNI;
+                    u.Mail = mail;
+                    u.EsAdmin = esAdmin;
+                    u.Bloqueado = bloqueado;
+                    contexto.usuarios.Update(u);
+                    salida = true;
+                    break;
+                }
+            if (salida)
+                contexto.SaveChanges();
+            return salida;
+        }
+
+        //Eliminar usuario
+        public bool EliminarUsuarios(int usuariosId)
+        {
+            try
+            {
+                bool salida = false;
+                foreach (Usuario u in contexto.usuarios)
+                    if (u.ID == usuariosId)
+                    {
+                        contexto.usuarios.Remove(u);
+                        salida = true;
+                        break;
+                    }
+                if (salida)
+                    contexto.SaveChanges();
+                return salida;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+        public void cerrar()
+        {
+            contexto.Dispose();
+        }
+
+
+        //--------------- solo se completo la clase Usuario
+
+
         public List<Hotel> hoteles { get; set; }
         public List<Vuelo> vuelos { get; set; }
+
+        private List<Usuario> usuarios;
+
         public List<Ciudad> ciudades { get; set; }
         public List<ReservaHotel> reservasHotel { get; set; }
         public List<ReservaVuelo> reservasVuelos { get; set; }
 
         private Usuario usuarioLogueado;
-        private DAL db;
+        //private DAL db;
 
-        public Agencia()
+       /* public Agencia()
         {
             usuarios = new List<Usuario>();
             ciudades = new List<Ciudad>();
@@ -26,8 +146,8 @@ namespace AgenciaDeViajes
             vuelos = new List<Vuelo>();
             reservasHotel = new List<ReservaHotel>();
             reservasVuelos = new List<ReservaVuelo>();
-            db = new DAL();
-        }
+            //db = new DAL();
+        }*/
 
         //Métodos clase Usuario
         public bool iniciarSesion(string mail, string password)
@@ -129,63 +249,13 @@ namespace AgenciaDeViajes
 
             usuarioLogueado.Credito -= cantidad;
         }
-        public bool AgregarUsuario(int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
-        {
-            Usuario usuario = new Usuario
-            {
-                DNI = dni,
-                Nombre = nombre,
-                Apellido = apellido,
-                Mail = mail,
-                Password = password,
-                EsAdmin = esAdmin
-            };
-            if (usuarios.Any(u => u.ID == usuario.ID || u.Mail == usuario.Mail))
-            {
-                return false;
-            }
-            db.insertUsuario(usuario);
-            //usuarios.Add(usuario);
-            return true;
-        }
+        
 
 
-        public bool EliminarUsuarios(int usuariosId)
-        {
-            var usuario = usuarios.FirstOrDefault(u => u.ID == usuariosId);
-            if (usuario == null)
-            {
-                return false;
-            }
-
-            if (usuario.MisReservasHoteles.FindAll(h => h.FechaHasta >= DateTime.Now).Count() > 0 || usuario.MisReservasVuelos.FindAll(v => v.MiVuelo.Fecha >= DateTime.Now).Count() > 0)
-            {
-                throw new InvalidOperationException("El usuario no se puede eliminar ya que cuenta con reservas.");
-            }
-
-            usuarios.Remove(usuario);
-            return true;
-        }
+        
 
 
-        public bool ModificarUsuarios(int usuarioId, string nombre, string apellido, int DNI, string mail, bool esAdmin, bool bloqueado)
-        {
-            var usuario = usuarios.FirstOrDefault(u => u.ID == usuarioId);
-            if (usuario == null)
-            {
-                return false; // El usuario no se encontró
-            }
-
-            // Actualizamos los campos del usuario
-            usuario.Nombre = nombre;
-            usuario.Apellido = apellido;
-            usuario.DNI = DNI;
-            usuario.Mail = mail;
-            usuario.EsAdmin = esAdmin;
-            usuario.Bloqueado = bloqueado;
-
-            return true; // Se modificó correctamente
-        }
+        
 
         public bool EsUsuarioAdmin()
         {
@@ -195,10 +265,10 @@ namespace AgenciaDeViajes
             return usuarioLogueado.EsAdmin;
         }
 
-        public List<Usuario> obtenerUsuarios()
+       /*public List<Usuario> obtenerUsuarios()
         {
             return usuarios.ToList();
-        }
+        }*/
 
         public string ObtenerNombreUsuarioLogueado()
         {
