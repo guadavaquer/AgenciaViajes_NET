@@ -34,7 +34,7 @@ namespace AgenciaDeViajes
 
             modelBuilder.Entity<Hotel>()
                 .ToTable("Hoteles")
-                .HasKey(h => h.ID);
+                .HasKey(h => h.idHotel);
 
            /* modelBuilder.Entity<ReservaHotel>()
                .ToTable("ReservaHoteles")

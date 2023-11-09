@@ -80,7 +80,7 @@ namespace AgenciaDeViajes
             table.Rows.Clear();
             foreach (var hotel in hoteles)
             {
-                table.Rows.Add(hotel.ID, hotel.Nombre, hotel.Ubicacion.Nombre, hotel.Capacidad, hotel.Costo);
+                table.Rows.Add(hotel.idHotel, hotel.nombre, hotel.Ubicacion.Nombre, hotel.Capacidad, hotel.Costo);
             }
         }
 
@@ -101,7 +101,7 @@ namespace AgenciaDeViajes
             Hotel hotel = getScreenObject();
             if (hotel != null)
             {
-                bool agregado = _agencia.AgregarHotel(hotel.ID, hotel.Nombre, hotel.Ubicacion, hotel.Capacidad, hotel.Costo);
+                bool agregado = _agencia.AgregarHotel(hotel.idHotel, hotel.nombre, hotel.Ubicacion, hotel.Capacidad, hotel.Costo);
                 if (agregado)
                 {
                     btnLimpiar_Click(sender, e);
@@ -120,7 +120,7 @@ namespace AgenciaDeViajes
             Hotel hotel = getScreenObject();
             if (hotel != null)
             {
-                bool modificado = _agencia.ModificarHoteles(hotel.ID, hotel.Nombre, hotel.Ubicacion, hotel.Capacidad, hotel.Costo);
+                bool modificado = _agencia.ModificarHoteles(hotel.idHotel, hotel.nombre, hotel.Ubicacion, hotel.Capacidad, hotel.Costo);
                 if (modificado)
                 {
                     Load_DataGrid();
@@ -137,7 +137,7 @@ namespace AgenciaDeViajes
             Hotel hotel = getScreenObject();
             if (hotel != null)
             {
-                bool eliminado = _agencia.EliminarHotel(hotel.ID);
+                bool eliminado = _agencia.EliminarHotel(hotel.idHotel);
                 if (eliminado)
                 {
                     Load_DataGrid();

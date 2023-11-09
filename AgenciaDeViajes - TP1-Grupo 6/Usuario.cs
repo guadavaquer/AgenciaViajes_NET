@@ -7,67 +7,67 @@ namespace AgenciaDeViajes
     {
         public const int MAX_INTENTOS_FALLIDOS = 3;
 
-        public int ID { get; set; }
-        public int DNI { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string Mail { get; set; }
-        public string Password { get; set; }
-        public int IntentosFallidos { get; set; }
-        public bool Bloqueado { get; set; }
-        public List<ReservaHotel> MisReservasHoteles { get; set; }
-        public List<ReservaVuelo> MisReservasVuelos { get; set; }
-        public double Credito { get; set; }
-        public bool EsAdmin { get; set; }
-        public List<Hotel> HotelesVisitados { get; set; }
-        public List<Vuelo> VuelosTomados { get; set; }
+        public int idUsuario { get; set; }
+        public int dni { get; set; }
+        public string nombre { get; set; }
+        public string apellido { get; set; }
+        public string mail { get; set; }
+        public string password { get; set; }
+        public int intentosFallidos { get; set; }
+        public bool bloqueado { get; set; }
+        public List<ReservaHotel> misReservasHoteles { get; set; }
+        public List<ReservaVuelo> misReservasVuelos { get; set; }
+        public double credito { get; set; }
+        public bool esAdmin { get; set; }
+        public List<Hotel> hotelesVisitados { get; set; }
+        public List<Vuelo> vuelosTomados { get; set; }
 
 
         //Constructor vacio
         public Usuario()
         {
-            IntentosFallidos = 0;
-            Bloqueado = false;
-            Credito = 0;
-            MisReservasVuelos = new List<ReservaVuelo>();
-            MisReservasHoteles = new List<ReservaHotel>();
-            HotelesVisitados = new List<Hotel>();
-            VuelosTomados = new List<Vuelo>();
+            intentosFallidos = 0;
+            bloqueado = false;
+            credito = 0;
+            misReservasVuelos = new List<ReservaVuelo>();
+            misReservasHoteles = new List<ReservaHotel>();
+            hotelesVisitados = new List<Hotel>();
+            vuelosTomados = new List<Vuelo>();
         }
 
         // Constructores con parámetros
-        public Usuario(int id, int dni, string nombre, string apellido, string mail)
+        public Usuario(int idUsuario, int dni, string nombre, string apellido, string mail)
         {
-            ID = id;
-            DNI = dni;
-            Nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
-            Apellido = apellido ?? throw new ArgumentNullException(nameof(apellido));
-            Mail = mail ?? throw new ArgumentNullException(nameof(mail));
+            idUsuario = idUsuario;
+            dni = dni;
+            nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
+            apellido = apellido ?? throw new ArgumentNullException(nameof(apellido));
+            mail = mail ?? throw new ArgumentNullException(nameof(mail));
         }
 
-        public Usuario(int id, int dni, string nombre, string apellido, string mail, string password, int intentosFallidos, bool bloqueado, double credito, bool esAdmin)
+        public Usuario(int idUsuario, int dni, string nombre, string apellido, string mail, string password, int intentosFallidos, bool bloqueado, double credito, bool esAdmin)
             : this()
         {
-            ID = id;
-            Nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
-            Apellido = apellido ?? throw new ArgumentNullException(nameof(apellido));
-            DNI = dni;
-            Mail = mail ?? throw new ArgumentNullException(nameof(mail));
-            Password = password ?? throw new ArgumentNullException(nameof(password));
-            IntentosFallidos = intentosFallidos;
-            Bloqueado = bloqueado;
-            Credito = credito;
-            EsAdmin = esAdmin;
+            idUsuario = idUsuario;
+            nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
+            apellido = apellido ?? throw new ArgumentNullException(nameof(apellido));
+            dni = dni;
+            mail = mail ?? throw new ArgumentNullException(nameof(mail));
+            password = password ?? throw new ArgumentNullException(nameof(password));
+            intentosFallidos = intentosFallidos;
+            bloqueado = bloqueado;
+            credito = credito;
+            esAdmin = esAdmin;
         }
 
         public Usuario(int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
         {
-            DNI = dni;
-            Nombre = nombre;
-            Apellido = apellido;
-            Mail = mail;
-            Password = password;
-            EsAdmin = esAdmin;
+            dni = dni;
+            nombre = nombre;
+            apellido = apellido;
+            mail = mail;
+            password = password;
+            esAdmin = esAdmin;
         }
 
         internal void cerrar()

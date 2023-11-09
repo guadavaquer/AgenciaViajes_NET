@@ -8,47 +8,56 @@ namespace AgenciaDeViajes
 {
     public class Hotel
     {
-        public int ID { get; set; }
-        public string Nombre { get; set; }
-        public int Capacidad { get; set; }
-        public double Costo { get; set; }
-        public int Vendido { get; private set; }
-        public Ciudad Ubicacion { get; set; }
-        public List<ReservaHotel> MisReservas { get; private set; }
+        internal int hotel;
+
+        public int idHotel { get; set; }
+        public string nombre { get; set; }
+        public int capacidad { get; set; }
+        public double costo { get; set; }
+       // public int Vendido { get; private set; }
+        public Ciudad ubicacion { get; set; }
+        public List<ReservaHotel> misReservas { get; private set; }
 
 
-        // Constructor vacio
+        //Constructor vacio
         public Hotel()
         {
 
         }
 
         //Constructor con parámetros
-        public Hotel(int id, string nombre, int capacidad, double costo, int vendido, Ciudad ubicacion)
+        public Hotel(int idHotel, string nombre, int capacidad, double costo, Ciudad ubicacion)
         {
-            ID = id;
-            Nombre = nombre;
-            Capacidad = capacidad;
-            Costo = costo;
-            Vendido = 0;
-            Ubicacion = ubicacion;
-            MisReservas = new List<ReservaHotel>();
+            this.idHotel = idHotel;
+            this.nombre = nombre;
+            capacidad = capacidad;
+            costo = costo;
+            ubicacion = ubicacion;
+            misReservas = new List<ReservaHotel>();
         }
 
-        public void ReservarHabitaciones(int cantidad)
+        public Hotel(string nombre, Ciudad ubicacion, int capacidad, double costo)
+        {
+            this.nombre = nombre;
+            ubicacion = ubicacion;
+            capacidad = capacidad;
+            costo = costo;
+        }
+
+        /*public void ReservarHabitaciones(int cantidad)
         {
             if (cantidad <= 0)
             {
                 throw new ArgumentException("La cantidad de habitaciones a reservar debe ser positiva.");
             }
 
-            if (Capacidad - Vendido < cantidad)
+            if (capacidad - vendido < cantidad)
             {
                 throw new InvalidOperationException("No hay suficientes habitaciones disponibles en el hotel.");
             }
 
-            Vendido += cantidad;
-        }
+            vendido += cantidad;
+        }*/
 
         public void AgregarReserva(ReservaHotel reserva)
         {
@@ -57,9 +66,9 @@ namespace AgenciaDeViajes
                 throw new ArgumentNullException(nameof(reserva), "La reserva no puede ser null.");
             }
 
-            if (!MisReservas.Contains(reserva))
+            if (!misReservas.Contains(reserva))
             {
-                MisReservas.Add(reserva);
+                misReservas.Add(reserva);
             }
             else
             {
@@ -69,18 +78,18 @@ namespace AgenciaDeViajes
 
         public bool EstaDisponible(DateTime fechaDesde, DateTime fechaHasta)
         {
-            return !MisReservas.Any(reserva =>
+            return !misReservas.Any(reserva =>
                 (reserva.FechaDesde <= fechaHasta && reserva.FechaHasta >= fechaDesde));
         }
 
-        // Validaciones
+        //Validaciones
         public bool EsValido()
         {
 
-            return !string.IsNullOrWhiteSpace(Nombre) &&
-                   Ubicacion != null &&
-                   Capacidad > 0 &&
-                   Costo >= 0;
+            return !string.IsNullOrWhiteSpace(nombre) &&
+                   ubicacion != null &&
+                   capacidad > 0 &&
+                   costo >= 0;
         }
     }
 }

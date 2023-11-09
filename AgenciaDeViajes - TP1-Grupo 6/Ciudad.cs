@@ -8,10 +8,12 @@ namespace AgenciaDeViajes
 {
     public class Ciudad
     {
-        public int ID { get; set; }
-        public string Nombre { get; set; }
-        public List<Vuelo> Vuelos { get; private set; }
-        public List<Hotel> Hoteles { get; private set; }
+        internal int ciudad;
+
+        public int idCiudad { get; set; }
+        public string nombre { get; set; }
+        public List<Vuelo> vuelos { get; private set; }
+        public List<Hotel> hoteles { get; private set; }
         
         //Constructor vacio
         public Ciudad()
@@ -20,12 +22,17 @@ namespace AgenciaDeViajes
         }
         
         //Constructor con parámetros
-        public Ciudad(int id, string nombre)
+        public Ciudad(int idCiudad, string nombre)
         {
-            ID = id;
-            Nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
-            Vuelos = new List<Vuelo>();
-            Hoteles = new List<Hotel>();
+            idCiudad = idCiudad;
+            nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
+            vuelos = new List<Vuelo>();
+            hoteles = new List<Hotel>();
+        }
+
+        public Ciudad(string nombre)
+        {
+            nombre = nombre;
         }
     }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,15 +50,141 @@ namespace AgenciaDeViajes
 
             //Se muestra solo hacia la vista
             foreach (Usuario u in contexto.usuarios)
-                if (u.EsAdmin)
+                if (u.esAdmin)
                     salida.Add(u);
             return salida;
         }
 
+
+        //Métodos de la clase Ciudad
+
+        //Agregar ciudad
+        public bool AgregarCiudad(int idCiudad, string nombre)
+        {
+            try
+            {
+                Ciudad nuevo = new Ciudad(nombre);
+                //Se agrega en la copia local
+                contexto.ciudades.Add(nuevo);
+                //Los cambios se guardan en la base de datos
+                contexto.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        //Modificar ciudad
+        public bool ModificarCiudad(int idCiudad, string nombre)
+        {
+            bool salida = false;
+            foreach (Ciudad c in contexto.ciudades)
+                if (c.ciudad == idCiudad)
+                {
+                    c.nombre = nombre;
+                    contexto.ciudades.Update(c);
+                    salida = true;
+                    break;
+                }
+            if (salida)
+                contexto.SaveChanges();
+            return salida;
+        }
+
+        //Eliminar ciudad
+        public bool EliminarCiudad(int idCiudad)
+        {
+            try
+            {
+                bool salida = false;
+                foreach (Ciudad c in contexto.ciudades)
+                    if (c.idCiudad == idCiudad)
+                    {
+                        contexto.ciudades.Remove(c);
+                        salida = true;
+                        break;
+                    }
+                if (salida)
+                    contexto.SaveChanges();
+                return salida;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+        //Métodos de la clase Hotel
+
+        //Agregar hotel
+        public bool AgregarHotel(int idHotel, string nombre, Ciudad ubicacion, int capacidad, double costo)
+        {
+            try
+            {
+                Hotel nuevo = new Hotel(nombre, ubicacion, capacidad, costo);
+                //Se agrega en la copia local
+                contexto.hoteles.Add(nuevo);
+                //Los cambios se guardan en la base de datos
+                contexto.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        //Modificar hotel
+        public bool ModificarHotel(int idHotel, string nombre, Ciudad ubicacion, int capacidad, double costo)
+        {
+            bool salida = false;
+            foreach (Hotel h in contexto.hoteles)
+                if (h.hotel == idHotel)
+                {
+                    h.nombre = nombre;
+                    h.ubicacion = ubicacion;
+                    h.capacidad = capacidad;
+                    h.costo = costo;
+                    contexto.hoteles.Update(h);
+                    salida = true;
+                    break;
+                }
+            if (salida)
+                contexto.SaveChanges();
+            return salida;
+        }
+
+        //Eliminar hotel
+        public bool EliminarHotel(int idHotel)
+        {
+            try
+            {
+                bool salida = false;
+                foreach (Hotel h in contexto.hoteles)
+                    if (h.idHotel == idHotel)
+                    {
+                        contexto.hoteles.Remove(h);
+                        salida = true;
+                        break;
+                    }
+                if (salida)
+                    contexto.SaveChanges();
+                return salida;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
         //Métodos de la clase Usuario
 
         //Agregar usuario
-        public bool AgregarUsuario(int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
+        public bool AgregarUsuario(int idUsuario, int dni, string nombre, string apellido, string mail, string password, bool esAdmin)
         {
             try
             {
@@ -73,19 +200,20 @@ namespace AgenciaDeViajes
                 return false;
             }
         }
+
         //Modificar usuario
-        public bool ModificarUsuarios(int usuarioId, string nombre, string apellido, int DNI, string mail, bool esAdmin, bool bloqueado)
+        public bool ModificarUsuario(int idUsuario, string nombre, string apellido, int dni, string mail, bool esAdmin, bool bloqueado)
         {
             bool salida = false;
-            foreach(Usuario u in contexto.usuarios)
-                if(u.ID == usuarioId)
+            foreach (Usuario u in contexto.usuarios)
+                if (u.idUsuario == idUsuario)
                 {
-                    u.Nombre = nombre;
-                    u.Apellido = apellido;
-                    u.DNI = DNI;
-                    u.Mail = mail;
-                    u.EsAdmin = esAdmin;
-                    u.Bloqueado = bloqueado;
+                    u.nombre = nombre;
+                    u.apellido = apellido;
+                    u.dni = dni;
+                    u.mail = mail;
+                    u.esAdmin = esAdmin;
+                    u.bloqueado = bloqueado;
                     contexto.usuarios.Update(u);
                     salida = true;
                     break;
@@ -96,13 +224,13 @@ namespace AgenciaDeViajes
         }
 
         //Eliminar usuario
-        public bool EliminarUsuarios(int usuariosId)
+        public bool EliminarUsuario(int idUsuario)
         {
             try
             {
                 bool salida = false;
                 foreach (Usuario u in contexto.usuarios)
-                    if (u.ID == usuariosId)
+                    if (u.idUsuario == idUsuario)
                     {
                         contexto.usuarios.Remove(u);
                         salida = true;
@@ -112,44 +240,167 @@ namespace AgenciaDeViajes
                     contexto.SaveChanges();
                 return salida;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
         }
-        public void cerrar()
+
+
+        //Métodos de la clase Vuelo
+
+        //Agregar vuelo
+        public bool AgregarVuelo(int idVuelo, Ciudad origen, Ciudad destino, int capacidad, double costo, DateTime fecha, string aerolinea, string avion)
         {
-            contexto.Dispose();
+            try
+            {
+                Vuelo nuevo = new Vuelo(origen, destino, capacidad, costo, fecha, aerolinea, avion);
+                //Se agrega en la copia local
+                contexto.vuelos.Add(nuevo);
+                //Los cambios se guardan en la base de datos
+                contexto.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        //Modificar vuelo
+        public bool ModificarVuelo(int idVuelo, Ciudad origen, Ciudad destino, int capacidad, double costo, DateTime fecha, string aerolinea, string avion)
+        {
+            bool salida = false;
+            foreach (Vuelo v in contexto.vuelos)
+                if (v.idVuelo == idVuelo)
+                {
+                    v.origen = origen;
+                    v.destino = destino;
+                    v.capacidad = capacidad;
+                    v.costo = costo;
+                    v.fecha = fecha;
+                    v.aerolinea = aerolinea;
+                    v.avion = avion;
+                    contexto.vuelos.Update(v);
+                    salida = true;
+                    break;
+                }
+            if (salida)
+                contexto.SaveChanges();
+            return salida;
+        }
+
+        //Eliminar vuelo
+        public bool EliminarVuelo(int idVuelo)
+        {
+            try
+            {
+                bool salida = false;
+                foreach (Vuelo v in contexto.vuelos)
+                    if (v.idVuelo == idVuelo)
+                    {
+                        contexto.vuelos.Remove(v);
+                        salida = true;
+                        break;
+                    }
+                if (salida)
+                    contexto.SaveChanges();
+                return salida;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
 
-        //--------------- solo se completo la clase Usuario
+        //Métodos de verificación clase Usuario
 
-
-        public List<Hotel> hoteles { get; set; }
-        public List<Vuelo> vuelos { get; set; }
-
-        private List<Usuario> usuarios;
-
-        public List<Ciudad> ciudades { get; set; }
-        public List<ReservaHotel> reservasHotel { get; set; }
-        public List<ReservaVuelo> reservasVuelos { get; set; }
-
-        private Usuario usuarioLogueado;
-        //private DAL db;
-
-       /* public Agencia()
+        public bool VerificarPassword(Usuario usuario, string password)
         {
-            usuarios = new List<Usuario>();
-            ciudades = new List<Ciudad>();
-            hoteles = new List<Hotel>();
-            vuelos = new List<Vuelo>();
-            reservasHotel = new List<ReservaHotel>();
-            reservasVuelos = new List<ReservaVuelo>();
-            //db = new DAL();
-        }*/
+            if (EstaBloqueado(usuario))
+            {
+                throw new InvalidOperationException("El usuario está bloqueado debido a intentos fallidos anteriores.");
+            }
 
-        //Métodos clase Usuario
+            if (usuario.password.Equals(password))
+            {
+                ResetearIntentosFallidos(usuario);
+                return true;
+            }
+            else
+            {
+                IncrementarIntentosFallidos(usuario);
+                if (EstaBloqueado(usuario))
+                {
+                    throw new InvalidOperationException("El usuario ha sido bloqueado por demasiados intentos fallidos.");
+                }
+                return false;
+            }
+        }
+        private void ResetearIntentosFallidos(Usuario usuario)
+        {
+            usuario.intentosFallidos = 0;
+            db.ResetarIntentosFallidos(usuario);
+        }
+
+        public bool EstaBloqueado(Usuario usuario)
+        {
+            return usuario.bloqueado || usuario.intentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS;
+        }
+
+        public void IncrementarIntentosFallidos(Usuario usuario)
+        {
+            usuario.intentosFallidos++;
+            if (usuario.intentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS)
+            {
+                usuario.bloqueado = true;
+            }
+            db.IncrementarIntentosFallidos(usuario);
+        }
+
+        public void DesbloquearUsuario(Usuario usuario)
+        {
+            usuario.bloqueado = false;
+            usuario.intentosFallidos = 0;
+
+        }
+
+        public void CargarCredito(Usuario usuario, double importe)
+        {
+            if (importe <= 0)
+            {
+                throw new ArgumentOutOfRangeException("El importe debe ser mayor que 0.");
+            }
+
+            usuario.credito += importe;
+        }
+
+        /* public List<Hotel> hoteles { get; set; }
+           public List<Vuelo> vuelos { get; set; }
+
+           private List<Usuario> usuarios;
+
+           public List<Ciudad> ciudades { get; set; }
+           public List<ReservaHotel> reservasHotel { get; set; }
+           public List<ReservaVuelo> reservasVuelos { get; set; }
+
+           private Usuario usuarioLogueado;
+
+        private DAL db;
+
+        public Agencia()
+         {
+             usuarios = new List<Usuario>();
+             ciudades = new List<Ciudad>();
+             hoteles = new List<Hotel>();
+             vuelos = new List<Vuelo>();
+             reservasHotel = new List<ReservaHotel>();
+             reservasVuelos = new List<ReservaVuelo>();
+             //db = new DAL();
+         }
+
+        //Métodos inicio sesión Usuario
         public bool iniciarSesion(string mail, string password)
         {
             //var usuario = usuarios.FirstOrDefault(u => u.Mail.Equals(mail));
@@ -167,55 +418,7 @@ namespace AgenciaDeViajes
             return false;
         }
 
-        public bool VerificarPassword(Usuario usuario, string password)
-        {
-            if (EstaBloqueado(usuario))
-            {
-                throw new InvalidOperationException("El usuario está bloqueado debido a intentos fallidos anteriores.");
-            }
-
-            if (usuario.Password.Equals(password))
-            {
-                ResetearIntentosFallidos(usuario);
-                return true;
-            }
-            else
-            {
-                IncrementarIntentosFallidos(usuario);
-                if (EstaBloqueado(usuario))
-                {
-                    throw new InvalidOperationException("El usuario ha sido bloqueado por demasiados intentos fallidos.");
-                }
-                return false;
-            }
-        }
-        private void ResetearIntentosFallidos(Usuario usuario)
-        {
-            usuario.IntentosFallidos = 0;
-            db.ResetarIntentosFallidos(usuario);
-        }
-
-        public bool EstaBloqueado(Usuario usuario)
-        {
-            return usuario.Bloqueado || usuario.IntentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS;
-        }
-
-        public void IncrementarIntentosFallidos(Usuario usuario)
-        {
-            usuario.IntentosFallidos++;
-            if (usuario.IntentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS)
-            {
-                usuario.Bloqueado = true;
-            }
-            db.IncrementarIntentosFallidos(usuario);
-        }
-
-        public void DesbloquearUsuario(Usuario usuario)
-        {
-            usuario.Bloqueado = false;
-            usuario.IntentosFallidos = 0;
-
-        }
+        
         public void cerrarSesion()
         {
             usuarioLogueado = null;
@@ -226,15 +429,7 @@ namespace AgenciaDeViajes
             CargarCredito(usuarioLogueado, importe);
         }
 
-        public void CargarCredito(Usuario usuario, double importe)
-        {
-            if (importe <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El importe debe ser mayor que 0.");
-            }
-
-            usuario.Credito += importe;
-        }
+        
         public void Pagar(double cantidad)
         {
             if (cantidad <= 0)
@@ -249,13 +444,7 @@ namespace AgenciaDeViajes
 
             usuarioLogueado.Credito -= cantidad;
         }
-        
 
-
-        
-
-
-        
 
         public bool EsUsuarioAdmin()
         {
@@ -265,10 +454,10 @@ namespace AgenciaDeViajes
             return usuarioLogueado.EsAdmin;
         }
 
-       /*public List<Usuario> obtenerUsuarios()
-        {
-            return usuarios.ToList();
-        }*/
+        public List<Usuario> obtenerUsuarios()
+         {
+             return usuarios.ToList();
+         }
 
         public string ObtenerNombreUsuarioLogueado()
         {
@@ -278,148 +467,6 @@ namespace AgenciaDeViajes
             return usuarioLogueado.Nombre;
         }
 
-        public bool AgregarHotel(int ID, string Nombre, Ciudad Ubicacion, int Capacidad, double Costo)
-        {
-            Hotel hotel = new Hotel(ID, Nombre, Capacidad, Costo,0, Ubicacion);
-            if (hoteles.Any(h => h.ID == hotel.ID || h.Nombre == hotel.Nombre && h.Ubicacion == hotel.Ubicacion))
-            {
-                return false;
-            }
-            if (!hotel.EsValido())
-            {
-                throw new InvalidOperationException("Los detalles del hotel no son válidos.");
-            }
-            hoteles.Add(hotel);
-            db.insertHotel(hotel);
-            return true;
-        }
-
-        // BAJA
-        public bool EliminarHotel(int hotelId)
-        {
-            var hotel = hoteles.FirstOrDefault(h => h.ID == hotelId);
-            if (hotel == null)
-            {
-                return false; // El hotel no se encontró
-            }
-            var reservas = hotel.MisReservas.FindAll(h => h.FechaHasta >= DateTime.Now);
-            if (reservas.Count() > 0)
-            {
-                foreach(var reserva in reservas)
-                {
-                    CargarCredito(reserva.MiUsuario, reserva.Pagado);
-                    reserva.MiUsuario.MisReservasHoteles.Remove(reserva);
-                }
-                return false;
-            }
-            hoteles.Remove(hotel);
-            return true;
-        }
-
-        // MODIFICACIÓN
-        public bool ModificarHoteles(int hotelId, string nombre, Ciudad ubicacion, int capacidad, double costo)
-        {
-            var hotel = hoteles.FirstOrDefault(h => h.ID == hotelId);
-            if (hotel == null)
-            {
-                return false; // El hotel no se encontró
-            }
-            if (hotel.Capacidad > capacidad && hotel.MisReservas.Any(h => h.FechaHasta >= DateTime.Now))
-            {
-                throw new InvalidOperationException("No se puede modificar la capacidad del hotel ya que existen reservas futuras.");
-            }
-            // Actualizamos los campos del hotel
-            hotel.Ubicacion = ubicacion;
-            hotel.Capacidad = capacidad;
-            hotel.Costo = costo;
-            hotel.Nombre = nombre;
-            return true; // Se modificó correctamente
-        }
-
-        // Agregar Ciudad
-
-        public bool AgregarCiudad(int ID, string Nombre)
-        {
-            Ciudad ciudad = new Ciudad(ID, Nombre);
-            if (ciudades.Any(c => c.ID == ciudad.ID || c.Nombre == ciudad.Nombre))
-            {
-                return false;
-            }
-            ciudades.Add(ciudad);
-            db.insertCiudad(ciudad);
-            return true;
-        }
-
-        // Eliminar Ciudad
-        public bool EliminarCiudad(int ciudadId)
-        {
-            var ciudad = ciudades.FirstOrDefault(c => c.ID == ciudadId);
-            if (ciudad == null)
-            {
-                return false;
-            }
-            ciudades.Remove(ciudad);
-            return true;
-        }
-
-        // Modificar Ciudad
-        public bool ModificarCiudad(int ciudadId, string nombre)
-        {
-            var ciudad = ciudades.FirstOrDefault(c => c.ID == ciudadId);
-            if (ciudad == null)
-            {
-                return false;
-            }
-            ciudad.Nombre = nombre;
-            return true;
-        }
-
-        // Agregar Vuelo
-        public bool AgregarVuelo(int ID, Ciudad Origen, Ciudad Destino, int Capacidad, double Costo, DateTime Fecha, string Aerolinea, string Avion)
-        {
-            Vuelo vuelo = new Vuelo(ID, Capacidad,0, Costo, Fecha, Aerolinea, Avion, Origen, Destino);
-            if (vuelos.Any(v => v.ID == vuelo.ID || v.Aerolinea == vuelo.Aerolinea && v.Avion == vuelo.Avion))
-            {
-                return false;
-            }
-            vuelos.Add(vuelo);
-            return true;
-        }
-
-        // Borrar Vuelo
-        public bool EliminarVuelo(int vueloId)
-        {
-            var vuelo = vuelos.FirstOrDefault(v => v.ID == vueloId);
-            if (vuelo == null)
-            {
-                return false; // El vuelo no se encontró
-            }
-            if (reservasVuelos.Any(r => r.MiVuelo.ID == vuelo.ID))
-            {
-                return false;
-            }
-            vuelos.Remove(vuelo);
-            return true;
-        }
-
-        // Modificar Vuelo
-        public bool ModificarVuelo(int vueloId, Ciudad origen, Ciudad destino, int capacidad, double costo, DateTime fecha, string aerolinea, string avion)
-        {
-            var vuelo = vuelos.FirstOrDefault(v => v.ID == vueloId);
-            if (vuelo == null)
-            {
-                return false; // El vuelo no se encontró
-            }
-            // Actualizamos los campos del vuelo
-            vuelo.Origen = origen;
-            vuelo.Destino = destino;
-            vuelo.Capacidad = capacidad;
-            vuelo.Costo = costo;
-            vuelo.Fecha = fecha;
-            vuelo.Aerolinea = aerolinea;
-            vuelo.Avion = avion;
-            return true; // Se modificó correctamente
-        }
 
         public void ReservarVuelo(int idVuelo, int personas)
         {
@@ -476,7 +523,7 @@ namespace AgenciaDeViajes
             {
                 throw new InvalidOperationException("Usuario no encontrado.");
             }
-            var hotel = hoteles.FirstOrDefault(h => h.ID == idHotel);
+            var hotel = hoteles.FirstOrDefault(h => h.idHotel == idHotel);
             if (hotel == null)
             {
                 throw new InvalidOperationException("Hotel no encontrado.");
@@ -518,7 +565,7 @@ namespace AgenciaDeViajes
             }
         }
 
-        //public void ReservarHotel(int idUsuario, int idHotel, int personas, DateTime fechaDesde, DateTime fechaHasta) { /* Implementación */ }
+        //public void ReservarHotel(int idUsuario, int idHotel, int personas, DateTime fechaDesde, DateTime fechaHasta) {  Implementación  }
         public List<Hotel> MostrarHoteles() { return hoteles.ToList(); }
         public List<Vuelo> MostrarVuelos() { return vuelos.ToList(); }
         public List<Ciudad> MostrarCiudades() { return ciudades.ToList(); }
@@ -527,7 +574,7 @@ namespace AgenciaDeViajes
 
         public List<Hotel> BuscarHoteles(int ID, string Nombre, Ciudad Ubicacion, int Capacidad, double Costo)
         {
-            return hoteles.FindAll(h => h.ID == ID || h.Nombre == Nombre || h.Ubicacion == Ubicacion
+            return hoteles.FindAll(h => h.idHotel == ID || h.nombre == Nombre || h.Ubicacion == Ubicacion
             || h.Capacidad == Capacidad || h.Costo == Costo).ToList();
         }
         public List<Hotel> BuscarHotel(
@@ -549,7 +596,7 @@ namespace AgenciaDeViajes
                 // Si se proporciona un costo máximo, verificamos si el costo del hotel es menor o igual
                 if (costoMaximo.HasValue && hotel.Costo > costoMaximo.Value) return false;
                 // Si se proporciona el nombre del hotel, verificamos si coincide o contiene el nombre dado
-                if (!string.IsNullOrEmpty(nombreHotel) && !hotel.Nombre.ToLower().Contains(nombreHotel.ToLower())) return false;
+                if (!string.IsNullOrEmpty(nombreHotel) && !hotel.nombre.ToLower().Contains(nombreHotel.ToLower())) return false;
                 // Si pasa todas las condiciones, el hotel es una coincidencia válida
                 return true;
             }).ToList();
@@ -571,5 +618,11 @@ namespace AgenciaDeViajes
             || u.DNI == DNI || u.Mail == Mail).ToList();
         }
 
+        */
+
+        public void cerrar()
+        {
+            contexto.Dispose();
+        }
     }
 }
