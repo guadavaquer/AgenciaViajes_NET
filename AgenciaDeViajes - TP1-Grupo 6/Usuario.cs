@@ -15,12 +15,15 @@ namespace AgenciaDeViajes
         public string password { get; set; }
         public int intentosFallidos { get; set; }
         public bool bloqueado { get; set; }
-        public List<ReservaHotel> misReservasHoteles { get; set; }
-        public List<ReservaVuelo> misReservasVuelos { get; set; }
         public double credito { get; set; }
         public bool esAdmin { get; set; }
-        public List<Hotel> hotelesVisitados { get; set; }
-        public List<Vuelo> vuelosTomados { get; set; }
+        public ICollection<Hotel> hoteles { get; } = new List<Hotel>();
+        public List<ReservaHotel> reservasHoteles { get; set; }
+        public ICollection<Vuelo> vuelos { get; } = new List<Vuelo>();
+        public List<ReservaVuelo> reservasVuelos { get; set; }
+        
+        
+        
 
 
         //Constructor vacio
@@ -29,10 +32,6 @@ namespace AgenciaDeViajes
             intentosFallidos = 0;
             bloqueado = false;
             credito = 0;
-            misReservasVuelos = new List<ReservaVuelo>();
-            misReservasHoteles = new List<ReservaHotel>();
-            hotelesVisitados = new List<Hotel>();
-            vuelosTomados = new List<Vuelo>();
         }
 
         // Constructores con parámetros

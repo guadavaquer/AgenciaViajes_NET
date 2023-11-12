@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 namespace AgenciaDeViajes
 {
     public class ReservaVuelo
-    {
-        public Vuelo MiVuelo { get; set; }
-        public Usuario MiUsuario { get; set; }
-        public double Pagado { get; set; }
+    {        
+        public int idVuelo { get; set; }
+        public Vuelo vuelo { get; set; }
+        public int idUsuario { get; set; }
+        public Usuario usuario { get; set; }
+        public double pagado { get; set; }
 
         //Constructor vacio
         public ReservaVuelo()

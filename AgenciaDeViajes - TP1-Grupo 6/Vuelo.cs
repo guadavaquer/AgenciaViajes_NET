@@ -17,16 +17,19 @@ namespace AgenciaDeViajes
         private string v3;
         private string v4;
 
-        public int idVuelo { get; private set; }
-        public int capacidad { get; set; 
+        public int idVuelo { get; set; }
+        public int capacidad { get; set; }
         public double costo { get; set; }
         public DateTime fecha { get; set; }
         public string aerolinea { get; set; }
         public string avion { get; set; }
+        public int idCiudadOrigen { get; set; }
         public Ciudad origen { get; set; }
+        public int idCiudadDestino { get; set; }
         public Ciudad destino { get; set; }
-        public List<Usuario> pasajeros { get; private set; }
-        public List<ReservaVuelo> misReservas { get; private set; }
+        public ICollection<Usuario> pasajeros { get; } = new List<Usuario>();
+        public List<ReservaVuelo> reservas { get; set; }
+
 
         //Constructor vacio
         public Vuelo()

@@ -14,9 +14,10 @@ namespace AgenciaDeViajes
         public string nombre { get; set; }
         public int capacidad { get; set; }
         public double costo { get; set; }
-       // public int Vendido { get; private set; }
-        public Ciudad ubicacion { get; set; }
-        public List<ReservaHotel> misReservas { get; private set; }
+        public int idCiudad { get; set; }
+        public Ciudad ciudad { get; set; }
+        public ICollection<Usuario> usuarios { get; } = new List<Usuario>();
+        public List<ReservaHotel> reservas { get; set; }
 
 
         //Constructor vacio
@@ -26,22 +27,22 @@ namespace AgenciaDeViajes
         }
 
         //Constructor con parámetros
-        public Hotel(int idHotel, string nombre, int capacidad, double costo, Ciudad ubicacion)
+        public Hotel(int idHotel, string nombre, int capacidad, double costo, Ciudad ciudad)
         {
             this.idHotel = idHotel;
             this.nombre = nombre;
             capacidad = capacidad;
             costo = costo;
-            ubicacion = ubicacion;
-            misReservas = new List<ReservaHotel>();
+            ciudad = ciudad;
+            reservas = new List<ReservaHotel>();
         }
 
-        public Hotel(string nombre, Ciudad ubicacion, int capacidad, double costo)
+        public Hotel(string nombre, Ciudad ciudad, int capacidad, double costo)
         {
             this.nombre = nombre;
-            ubicacion = ubicacion;
-            capacidad = capacidad;
-            costo = costo;
+            this.ciudad = ciudad;
+            this.capacidad = capacidad;
+            this.costo = costo;
         }
 
         /*public void ReservarHabitaciones(int cantidad)
@@ -66,9 +67,9 @@ namespace AgenciaDeViajes
                 throw new ArgumentNullException(nameof(reserva), "La reserva no puede ser null.");
             }
 
-            if (!misReservas.Contains(reserva))
+            if (!reservas.Contains(reserva))
             {
-                misReservas.Add(reserva);
+                reservas.Add(reserva);
             }
             else
             {
@@ -78,8 +79,8 @@ namespace AgenciaDeViajes
 
         public bool EstaDisponible(DateTime fechaDesde, DateTime fechaHasta)
         {
-            return !misReservas.Any(reserva =>
-                (reserva.FechaDesde <= fechaHasta && reserva.FechaHasta >= fechaDesde));
+            return !reservas.Any(reserva =>
+                (reserva.fechaDesde <= fechaHasta && reserva.fechaHasta >= fechaDesde));
         }
 
         //Validaciones
@@ -87,7 +88,7 @@ namespace AgenciaDeViajes
         {
 
             return !string.IsNullOrWhiteSpace(nombre) &&
-                   ubicacion != null &&
+                   this.ciudad != null &&
                    capacidad > 0 &&
                    costo >= 0;
         }

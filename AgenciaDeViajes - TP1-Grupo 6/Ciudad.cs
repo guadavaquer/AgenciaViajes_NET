@@ -12,9 +12,9 @@ namespace AgenciaDeViajes
 
         public int idCiudad { get; set; }
         public string nombre { get; set; }
-        public List<Vuelo> vuelos { get; private set; }
-        public List<Hotel> hoteles { get; private set; }
-        
+        public List<Hotel> hoteles { get; set; }
+        public List<Vuelo> vuelos { get; set; }
+
         //Constructor vacio
         public Ciudad()
         {
@@ -26,8 +26,6 @@ namespace AgenciaDeViajes
         {
             idCiudad = idCiudad;
             nombre = nombre ?? throw new ArgumentNullException(nameof(nombre));
-            vuelos = new List<Vuelo>();
-            hoteles = new List<Hotel>();
         }
 
         public Ciudad(string nombre)
