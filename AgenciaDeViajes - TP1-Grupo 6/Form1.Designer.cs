@@ -17,7 +17,7 @@
             {
                 components.Dispose();
             }
-            usuarios.cerrar();
+            agenciaDeViajes.cerrar();
             base.Dispose(disposing);
         }
 

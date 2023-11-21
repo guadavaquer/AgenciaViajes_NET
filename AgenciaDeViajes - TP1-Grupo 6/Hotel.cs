@@ -8,16 +8,14 @@ namespace AgenciaDeViajes
 {
     public class Hotel
     {
-        internal int hotel;
-
-        public int idHotel { get; set; }
-        public string nombre { get; set; }
-        public int capacidad { get; set; }
-        public double costo { get; set; }
-        public int idCiudad { get; set; }
+        public int? idHotel { get; set; }
+        public string? nombre { get; set; }
+        public int? capacidad { get; set; }
+        public double? costo { get; set; }
+        public int? idCiudad { get; set; }
         public Ciudad ciudad { get; set; }
         public ICollection<Usuario> usuarios { get; } = new List<Usuario>();
-        public List<ReservaHotel> reservas { get; set; }
+        public List<ReservaHotel>? reservas { get; set; }
 
 
         //Constructor vacio
@@ -27,24 +25,17 @@ namespace AgenciaDeViajes
         }
 
         //Constructor con parámetros
-        public Hotel(int idHotel, string nombre, int capacidad, double costo, Ciudad ciudad)
+        public Hotel(int? idHotel, string? nombre, int? capacidad, double? costo, Ciudad ciudad)
         {
             this.idHotel = idHotel;
             this.nombre = nombre;
-            capacidad = capacidad;
-            costo = costo;
-            ciudad = ciudad;
-            reservas = new List<ReservaHotel>();
-        }
-
-        public Hotel(string nombre, Ciudad ciudad, int capacidad, double costo)
-        {
-            this.nombre = nombre;
-            this.ciudad = ciudad;
             this.capacidad = capacidad;
             this.costo = costo;
+            this.ciudad = ciudad;
+            this.idCiudad = ciudad.idCiudad;
         }
 
+        
         /*public void ReservarHabitaciones(int cantidad)
         {
             if (cantidad <= 0)
@@ -59,7 +50,7 @@ namespace AgenciaDeViajes
 
             vendido += cantidad;
         }*/
-
+        /*
         public void AgregarReserva(ReservaHotel reserva)
         {
             if (reserva == null)
@@ -92,5 +83,6 @@ namespace AgenciaDeViajes
                    capacidad > 0 &&
                    costo >= 0;
         }
+        */
     }
 }

@@ -69,10 +69,14 @@ namespace AgenciaDeViajes
                 return;
             }
 
-            miAgenciaDeViajes.AgregarUsuario(dniNumber, nombre, apellido, mail, password, false);
+            miAgenciaDeViajes.AgregarUsuario(dniNumber, nombre, apellido, mail, password,0,false,0);
 
             this.TransfInicioSesion();
         }
 
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

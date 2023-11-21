@@ -17,7 +17,7 @@ namespace AgenciaDeViajes
         public delegate void TransfDelegado();
         public TransfDelegado TransfInicioSesion;
 
-        
+
         // Delegados para mostrar formularios específicos.
         public delegate void MostrarFormularioDelegate();
         private MostrarFormularioDelegate mostrarHotelesFormDelegate;

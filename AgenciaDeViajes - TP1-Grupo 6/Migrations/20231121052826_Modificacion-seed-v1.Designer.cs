@@ -4,6 +4,7 @@ using AgenciaDeViajes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgenciaDeViajes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121052826_Modificacion-seed-v1")]
+    partial class Modificacionseedv1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -291,7 +294,6 @@ namespace AgenciaDeViajes.Migrations
                             avion = "LF-5909",
                             capacidad = 150,
                             costo = 600000.0,
-                            fecha = new DateTime(2023, 5, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             idCiudadDestino = 2,
                             idCiudadOrigen = 1
                         },
@@ -302,7 +304,6 @@ namespace AgenciaDeViajes.Migrations
                             avion = "LF-9501",
                             capacidad = 150,
                             costo = 650000.0,
-                            fecha = new DateTime(2023, 6, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             idCiudadDestino = 1,
                             idCiudadOrigen = 2
                         });

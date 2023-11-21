@@ -8,13 +8,13 @@ namespace AgenciaDeViajes
 {
     public class ReservaHotel
     {
-        public int idHotel { get; set; }
+        public int? idHotel { get; set; }
         public Hotel hotel { get; set; }
-        public int idUsuario { get; set; }
+        public int? idUsuario { get; set; }
         public Usuario usuario { get; set; }
-        public DateTime fechaDesde { get; set; }
-        public DateTime fechaHasta { get; set; }
-        public double pagado { get; set; }
+        public DateTime? fechaDesde { get; set; }
+        public DateTime? fechaHasta { get; set; }
+        public int? pagado { get; set; }
 
         //Constructor vacio
         public ReservaHotel()
@@ -23,17 +23,17 @@ namespace AgenciaDeViajes
         }
 
         //Constructor con parámetros
-        public ReservaHotel(Hotel hotel, Usuario usuario, DateTime fechaDesde, DateTime fechaHasta, double pagado)
+        public ReservaHotel(Hotel hotel, Usuario usuario, DateTime? fechaDesde, DateTime? fechaHasta, int? pagado)
         {
-            hotel = hotel ?? throw new ArgumentNullException(nameof(hotel), "El hotel no puede ser null.");
-            usuario = usuario ?? throw new ArgumentNullException(nameof(usuario), "El usuario no puede ser null.");
-            fechaDesde = fechaDesde;
-            fechaHasta = fechaHasta;
-            if (fechaDesde > fechaHasta)
+            this.hotel = hotel;
+            this.usuario = usuario;
+            this.fechaDesde = fechaDesde;
+            this.fechaHasta = fechaHasta;
+            if (fechaDesde != null && fechaHasta != null && fechaDesde > fechaHasta)
             {
                 throw new ArgumentException("La fecha de inicio no puede ser posterior a la fecha de finalización.");
             }
-            pagado = pagado;
+            this.pagado = pagado;
         }
 
     }

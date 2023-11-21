@@ -37,15 +37,17 @@ namespace AgenciaDeViajes
                 .ToTable("Hoteles")
                 .HasKey(h => h.idHotel);
 
-            modelBuilder.Entity<Usuario>()
-                .ToTable("Usuarios")
-                .HasKey(u => u.idUsuario);
-
             modelBuilder.Entity<Vuelo>()
                 .ToTable("Vuelos")
                 .HasKey(v => v.idVuelo);
 
-            //Relaciones entre clases 
+            modelBuilder.Entity<Usuario>()
+               .ToTable("Usuarios")
+               .HasKey(u => u.idUsuario);
+
+            //Relaciones entre clases
+
+            //Definición de la relación many to many Usuario -> Hotel
             modelBuilder.Entity<Usuario>()
                 .HasMany(U => U.hoteles)
                 .WithMany(H => H.usuarios)
@@ -55,6 +57,7 @@ namespace AgenciaDeViajes
                     erh => erh.HasKey(k => new { k.idUsuario, k.idHotel })
                 );
 
+            //Definición de la relación many to many Usuario -> Vuelo
             modelBuilder.Entity<Usuario>()
                 .HasMany(U => U.vuelos)
                 .WithMany(V => V.pasajeros)
@@ -64,23 +67,43 @@ namespace AgenciaDeViajes
                     erv => erv.HasKey(k => new { k.idUsuario, k.idVuelo })
                 );
 
+            //Definición de la relación one to many Hotel -> Ciudad
             modelBuilder.Entity<Hotel>()
-            .HasOne(H => H.ciudad)
-            .WithMany(C => C.hoteles)
-            .HasForeignKey(H => H.idCiudad)
-            .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(H => H.ciudad)
+                .WithMany(C => C.hoteles)
+                .HasForeignKey(H => H.idCiudad)
+                .OnDelete(DeleteBehavior.Cascade
+                );
+            modelBuilder.Entity<Ciudad>()
+                .HasMany(C => C.hoteles)
+                .WithOne(H => H.ciudad)
+                .HasForeignKey(H => H.idCiudad)
+                .OnDelete(DeleteBehavior.Cascade
+                );
 
+            //Definición de la relación one to many Vuelo -> Ciudad origen 
             modelBuilder.Entity<Vuelo>()
-            .HasOne(v => v.origen)
-            .WithMany(c => c.vuelos)
-            .HasForeignKey(v => v.idCiudadOrigen)
-            .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(v => v.origen)
+                .WithMany(c => c.vuelosOrigen)
+                .HasForeignKey(v => v.idCiudadOrigen)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Ciudad>()
+                .HasMany(c => c.vuelosOrigen)
+                .WithOne(v => v.origen)
+                .HasForeignKey(v => v.idCiudadOrigen)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            //Definición de la relación one to many Vuelo -> Ciudad destino
             modelBuilder.Entity<Vuelo>()
-            .HasOne(v => v.destino)
-            .WithMany(c => c.vuelos)
-            .HasForeignKey(v => v.idCiudadDestino)
-            .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(v => v.destino)
+                .WithMany(c => c.vuelosDestino)
+                .HasForeignKey(v => v.idCiudadDestino)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Ciudad>()
+                .HasMany(c => c.vuelosDestino)
+                .WithOne(v => v.destino)
+                .HasForeignKey(v => v.idCiudadDestino)
+                .OnDelete(DeleteBehavior.NoAction);
 
             //Propiedades de los datos
 
@@ -106,23 +129,55 @@ namespace AgenciaDeViajes
                     htel.Property(h => h.costo).IsRequired(true);
                 });
 
-            modelBuilder.Entity<ReservaHotel>();
+            modelBuilder.Entity<ReservaHotel>(
+                resH =>
+                {
+                    resH.Property(rh => rh.idHotel).HasColumnType("int");
+                    resH.Property(rh => rh.idHotel).IsRequired(true);
+                    resH.Property(rh => rh.idUsuario).HasColumnType("int");
+                    resH.Property(rh => rh.idUsuario).IsRequired(true);
+                    resH.Property(rh => rh.fechaDesde).HasColumnType("datetime");
+                    resH.Property(rh => rh.fechaDesde).IsRequired(true);
+                    resH.Property(rh => rh.fechaHasta).HasColumnType("datetime");
+                    resH.Property(rh => rh.fechaHasta).IsRequired(true);
+                    resH.Property(rh => rh.pagado).HasColumnType("int");
+                    resH.Property(rh => rh.pagado).IsRequired(true);
 
-            modelBuilder.Entity<ReservaVuelo>();
+                }
+                );
+
+            modelBuilder.Entity<ReservaVuelo>(
+            resV =>
+                {
+                    resV.Property(rv => rv.idVuelo).HasColumnType("int");
+                    resV.Property(rv => rv.idVuelo).IsRequired(true);
+                    resV.Property(rv => rv.idUsuario).HasColumnType("int");
+                    resV.Property(rv => rv.idUsuario).IsRequired(true);
+                    resV.Property(rv => rv.pagado).HasColumnType("int");
+                    resV.Property(rv => rv.pagado).IsRequired(true);
+
+                }
+                );
 
             modelBuilder.Entity<Usuario>(
                 usr =>
                 {
                     usr.Property(u => u.idUsuario).HasColumnType("int");
                     usr.Property(u => u.idUsuario).IsRequired(true);
+                    usr.Property(u => u.dni).HasColumnType("int");
+                    usr.Property(u => u.dni).IsRequired(true);
                     usr.Property(u => u.nombre).HasColumnType("varchar(50)");
                     usr.Property(u => u.nombre).IsRequired(true);
+                    usr.Property(u => u.apellido).HasColumnType("varchar(50)");
+                    usr.Property(u => u.apellido).IsRequired(true);
                     usr.Property(u => u.mail).HasColumnType("varchar(512)");
                     usr.Property(u => u.mail).IsRequired(true);
                     usr.Property(u => u.password).HasColumnType("varchar(50)");
                     usr.Property(u => u.password).IsRequired(true);
+                    usr.Property(u => u.intentosFallidos).HasColumnType("int");
                     usr.Property(u => u.esAdmin).HasColumnType("bit");
                     usr.Property(u => u.bloqueado).HasColumnType("bit");
+                    usr.Property(u => u.credito).HasColumnType("float");
                 });
 
             modelBuilder.Entity<Vuelo>(
@@ -139,8 +194,33 @@ namespace AgenciaDeViajes
                      vlo.Property(v => v.avion).HasColumnType("varchar(50)");
                      vlo.Property(v => v.avion).IsRequired(true);
                  });
-            
-                
+
+
+            //Agrego datos de prueba
+
+            modelBuilder.Entity<Ciudad>().HasData(
+               new { idCiudad = 1, nombre= "Buenos Aires" },
+               new { idCiudad = 2, nombre = "Berlin" });
+
+            modelBuilder.Entity<Hotel>().HasData(
+                new { idHotel = 1, nombre = "Four Seasons", capacidad = 150, costo = (double)25000, idCiudad = 1 },
+                new { idHotel = 2, nombre = "Gat Point Charlie", capacidad = 200, costo = (double)15000, idCiudad = 2 });
+
+            modelBuilder.Entity<Vuelo>().HasData(
+                new { idVuelo = 1, capacidad = 150, costo = (double)600000, fecha= new DateTime(2023, 5, 30), aerolinea ="Aero", avion="LF-5909", idCiudadOrigen = 1, idCiudadDestino=2 },
+                new { idVuelo = 2, capacidad = 150, costo = (double)650000, fecha = new DateTime(2023, 6, 20), aerolinea = "Aero", avion = "LF-9501", idCiudadOrigen = 2, idCiudadDestino = 1 });
+
+            modelBuilder.Entity<ReservaHotel>().HasData(
+
+                new { idHotel = 1, idUsuario = 2, fechaDesde = new DateTime(2023,5,30), fechaHasta = new DateTime(2023, 6, 20), pagado = (int)1});
+
+            modelBuilder.Entity<ReservaVuelo>().HasData(
+                new { idVuelo = 1, idUsuario = 2, pagado = (int)1 },
+                new { idVuelo = 2, idUsuario = 2, pagado = (int)1 });
+
+            modelBuilder.Entity<Usuario>().HasData(
+                new { idUsuario = 1, dni = 11222333, nombre = "Admin", apellido = "Administrador", mail = "admin@agencia", password = "12345", intentosFallidos = 0, esAdmin = true, bloqueado = false, credito = (double)0 },
+                new { idUsuario = 2, dni = 22333444, nombre = "User", apellido = "Usuario", mail = "user@agencia", password = "56789", intentosFallidos = 1, esAdmin = false, bloqueado = false, credito = (double)15000 });
 
             modelBuilder.Ignore<Agencia>();
            

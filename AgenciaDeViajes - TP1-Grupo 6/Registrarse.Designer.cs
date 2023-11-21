@@ -34,11 +34,12 @@
             txtApellido = new TextBox();
             txtMail = new TextBox();
             txtPassword = new TextBox();
+            label1 = new Label();
             SuspendLayout();
             // 
             // btnRegistrarse
             // 
-            btnRegistrarse.Location = new Point(294, 260);
+            btnRegistrarse.Location = new Point(216, 321);
             btnRegistrarse.Margin = new Padding(3, 2, 3, 2);
             btnRegistrarse.Name = "btnRegistrarse";
             btnRegistrarse.Size = new Size(105, 30);
@@ -49,25 +50,25 @@
             // 
             // txtDni
             // 
-            txtDni.Location = new Point(215, 35);
+            txtDni.Location = new Point(135, 115);
             txtDni.Margin = new Padding(3, 2, 3, 2);
             txtDni.Name = "txtDni";
             txtDni.PlaceholderText = "DNI";
             txtDni.Size = new Size(263, 23);
-            txtDni.TabIndex = 5;
+            txtDni.TabIndex = 1;
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(215, 72);
+            txtNombre.Location = new Point(135, 152);
             txtNombre.Margin = new Padding(3, 2, 3, 2);
             txtNombre.Name = "txtNombre";
             txtNombre.PlaceholderText = "Nombre";
             txtNombre.Size = new Size(263, 23);
-            txtNombre.TabIndex = 4;
+            txtNombre.TabIndex = 2;
             // 
             // txtApellido
             // 
-            txtApellido.Location = new Point(215, 110);
+            txtApellido.Location = new Point(135, 190);
             txtApellido.Margin = new Padding(3, 2, 3, 2);
             txtApellido.Name = "txtApellido";
             txtApellido.PlaceholderText = "Apellido";
@@ -76,28 +77,40 @@
             // 
             // txtMail
             // 
-            txtMail.Location = new Point(215, 148);
+            txtMail.Location = new Point(135, 228);
             txtMail.Margin = new Padding(3, 2, 3, 2);
             txtMail.Name = "txtMail";
             txtMail.PlaceholderText = "Correo Electrónico";
             txtMail.Size = new Size(263, 23);
-            txtMail.TabIndex = 2;
+            txtMail.TabIndex = 4;
             // 
             // txtPassword
             // 
-            txtPassword.Location = new Point(215, 185);
+            txtPassword.Location = new Point(135, 265);
             txtPassword.Margin = new Padding(3, 2, 3, 2);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
             txtPassword.PlaceholderText = "Contraseña";
             txtPassword.Size = new Size(263, 23);
-            txtPassword.TabIndex = 1;
+            txtPassword.TabIndex = 5;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(135, 48);
+            label1.Name = "label1";
+            label1.Size = new Size(145, 21);
+            label1.TabIndex = 7;
+            label1.Text = "Registro de usuario";
+            label1.Click += label1_Click;
             // 
             // Registrarse
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
+            ClientSize = new Size(539, 392);
+            Controls.Add(label1);
             Controls.Add(txtPassword);
             Controls.Add(txtMail);
             Controls.Add(txtApellido);
@@ -119,5 +132,6 @@
         private TextBox txtApellido;
         private TextBox txtMail;
         private TextBox txtPassword;
+        private Label label1;
     }
 }

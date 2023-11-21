@@ -33,6 +33,7 @@
             txtEmail = new TextBox();
             txtPassword = new TextBox();
             btnRegistrarse = new Button();
+            label1 = new Label();
             SuspendLayout();
             // 
             // btnIniciarSesion
@@ -59,11 +60,17 @@
             btnRegistrarse.UseVisualStyleBackColor = true;
             btnRegistrarse.Click += HandleBtnRegistrarseClick;
             // 
+            // label1
+            // 
+            resources.ApplyResources(label1, "label1");
+            label1.Name = "label1";
+            // 
             // IniciarSesion
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             ControlBox = false;
+            Controls.Add(label1);
             Controls.Add(btnRegistrarse);
             Controls.Add(btnIniciarSesion);
             Controls.Add(txtPassword);
@@ -78,5 +85,6 @@
         private TextBox txtEmail;
         private TextBox txtPassword;
         private Button btnRegistrarse;
+        private Label label1;
     }
 }

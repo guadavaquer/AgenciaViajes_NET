@@ -1,4 +1,5 @@
 ﻿using AgenciaDeViajes;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,16 +18,18 @@ namespace AgenciaDeViajes
     {
         private Agencia _agencia;
         private DataTable table = new DataTable("table");
+
+        private int? idUsuarioSeleccionado;
         public ABMUsuarioForm(Agencia agencia)
         {
             InitializeComponent();
             _agencia = agencia;
+            idUsuarioSeleccionado = -1;
             MessageBox.Show("Bienvenido al formulario de gestión de Usuarios.", "ABM Usuarios", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ABMUsuarioForm_Load(object sender, EventArgs e)
         {
-            List<Usuario> usuarios = _agencia.MostrarUsuarios();
 
             table.Columns.Add("ID", Type.GetType("System.Int32"));
             table.Columns.Add("Nombre", Type.GetType("System.String"));
@@ -41,46 +44,25 @@ namespace AgenciaDeViajes
 
         }
 
-        private Usuario? getScreenObject()
-        {
-            int ID = 0;
-            Int32.TryParse(txtID.Text, out ID);
-            string Nombre = txtNombre.Text;
-            string Apellido = txtApellido.Text;
-            int DNI = 0;
-            Int32.TryParse(txtDNI.Text, out DNI);
-            string Mail = txtMail.Text;
-            bool EsAdmin = chkAdministrador.Checked;
-            string Password = txtPassword.Text;
-            Usuario usuario = new Usuario(ID, DNI, Nombre, Apellido, Mail, Password,0,false,0, EsAdmin);
-            return usuario;
-        }
-
         private void Load_DataGrid()
         {
             List<Usuario> usuarios;
-
-            if (String.IsNullOrEmpty(txtID.Text) && String.IsNullOrEmpty(txtNombre.Text)
-                && String.IsNullOrEmpty(txtApellido.Text) && String.IsNullOrEmpty(txtDNI.Text)
-                && String.IsNullOrEmpty(txtMail.Text))
+            if (!String.IsNullOrEmpty(txtDNI.Text) || !String.IsNullOrEmpty(txtNombre.Text)
+                || !String.IsNullOrEmpty(txtApellido.Text)
+                || !String.IsNullOrEmpty(txtMail.Text))
             {
-                usuarios = _agencia.MostrarUsuarios();
+                int.TryParse(txtDNI.Text, out int dni);
+                usuarios = _agencia.obtenerUsuarios(dni, txtNombre.Text, txtApellido.Text, txtMail.Text);
             }
             else
             {
-                int ID = 0;
-                Int32.TryParse(txtID.Text, out ID);
-                string Nombre = txtNombre.Text;
-                string Apellido = txtApellido.Text;
-                int DNI = 0;
-                Int32.TryParse(txtDNI.Text, out DNI);
-                string Mail = txtMail.Text;
-                usuarios = _agencia.BuscarUsuarios(ID, Nombre, Apellido, DNI, Mail);
+                usuarios = _agencia.obtenerUsuarios();
             }
+
             table.Rows.Clear();
             foreach (var usuario in usuarios)
             {
-                table.Rows.Add(usuario.ID, usuario.Nombre, usuario.Apellido, usuario.DNI, usuario.Mail, usuario.Password, usuario.EsAdmin);
+                table.Rows.Add(usuario.idUsuario, usuario.nombre, usuario.apellido, usuario.dni, usuario.mail, usuario.password, usuario.esAdmin);
             }
         }
 
@@ -88,21 +70,22 @@ namespace AgenciaDeViajes
         {
             int index = e.RowIndex;
             DataGridViewRow row = dgv.Rows[index];
+            idUsuarioSeleccionado = int.Parse(row.Cells[0].Value.ToString());
             txtID.Text = row.Cells[0].Value.ToString();
             txtNombre.Text = row.Cells[1].Value.ToString();
             txtApellido.Text = row.Cells[2].Value.ToString();
             txtDNI.Text = row.Cells[3].Value.ToString();
             txtMail.Text = row.Cells[4].Value.ToString();
             txtPassword.Text = row.Cells[5].Value.ToString();
-            chkAdministrador.Checked = (bool)row.Cells[6].Value;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            Usuario usuario = getScreenObject();
-            if (usuario != null)
+            if (!String.IsNullOrEmpty(txtDNI.Text) && !String.IsNullOrEmpty(txtNombre.Text)
+                && !String.IsNullOrEmpty(txtApellido.Text) && !String.IsNullOrEmpty(txtMail.Text) && !String.IsNullOrEmpty(txtPassword.Text))
             {
-                bool agregado = _agencia.AgregarUsuario(usuario.DNI, usuario.Nombre, usuario.Apellido, usuario.Mail, usuario.Password, usuario.EsAdmin);
+                int.TryParse(txtDNI.Text, out int dni);
+                bool agregado = _agencia.AgregarUsuario(dni, txtNombre.Text,txtApellido.Text, txtMail.Text, txtPassword.Text, 0, false, 0);
                 if (agregado)
                 {
                     btnLimpiar_Click(sender, e);
@@ -118,10 +101,11 @@ namespace AgenciaDeViajes
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            Usuario usuario = getScreenObject();
-            if (usuario != null)
+            if (idUsuarioSeleccionado != -1 && !String.IsNullOrEmpty(txtDNI.Text) && !String.IsNullOrEmpty(txtNombre.Text)
+                && !String.IsNullOrEmpty(txtApellido.Text) && !String.IsNullOrEmpty(txtMail.Text))
             {
-                bool modificado = _agencia.ModificarUsuarios(usuario.ID, usuario.Nombre, usuario.Apellido, usuario.DNI, usuario.Mail, usuario.EsAdmin, false);
+                int.TryParse(txtDNI.Text, out int dni);
+                bool modificado = _agencia.ModificarUsuario(idUsuarioSeleccionado, dni, txtNombre.Text, txtApellido.Text, txtMail.Text);
                 if (modificado)
                 {
                     Load_DataGrid();
@@ -135,10 +119,9 @@ namespace AgenciaDeViajes
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            Usuario usuario = getScreenObject();
-            if (usuario != null)
+            if (idUsuarioSeleccionado != -1)
             {
-                bool eliminado = _agencia.EliminarUsuarios(usuario.ID);
+                bool eliminado = _agencia.EliminarUsuario(idUsuarioSeleccionado);
                 if (eliminado)
                 {
                     Load_DataGrid();
@@ -162,8 +145,9 @@ namespace AgenciaDeViajes
             txtApellido.Text = String.Empty;
             txtDNI.Text = String.Empty;
             txtMail.Text = String.Empty;
-            chkAdministrador.Checked = false;
             txtPassword.Text = String.Empty;
+            idUsuarioSeleccionado = -1;
         }
+
     }
 }

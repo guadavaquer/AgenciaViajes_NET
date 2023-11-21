@@ -15,10 +15,14 @@ namespace AgenciaDeViajes
     {
         private Agencia _agencia;
         private DataTable table = new DataTable("table");
+
+
+        private int? idCiudadSeleccionada;
         public ABMCiudadForm(Agencia agencia)
         {
             InitializeComponent();
             _agencia = agencia;
+            idCiudadSeleccionada = -1;
             MessageBox.Show("Bienvenido al formulario de gestión de Ciudades.", "ABM Ciudades", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -30,43 +34,21 @@ namespace AgenciaDeViajes
             Load_DataGrid();
         }
 
-        private Ciudad getScreenObject()
-        {
-            int ID = 0;
-            Int32.TryParse(txtID.Text, out ID);
-            if (ID == 0)
-            {
-                MessageBox.Show("El ID debe ser numerico y mayor a 1.", "ABM Ciudades", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return null;
-            }
-            string Nombre = txtNombre.Text;
-            Ciudad ciudad = new Ciudad(ID, Nombre);
-            return ciudad;
-        }
-
         private void Load_DataGrid()
         {
             List<Ciudad> ciudades;
-            if (String.IsNullOrEmpty(txtID.Text) && String.IsNullOrEmpty(txtNombre.Text))
+            if (!String.IsNullOrEmpty(txtNombre.Text))
             {
-                ciudades = _agencia.MostrarCiudades();
+                ciudades = _agencia.obtenerCiudades(txtNombre.Text);
             }
             else
             {
-                Ciudad ciudad = getScreenObject();
-                if (ciudad != null)
-                {
-                    ciudades = _agencia.BuscarCiudad(ciudad.ID, ciudad.Nombre);
-                }
-                else
-                {
-                    ciudades = new List<Ciudad>();
-                }
+                ciudades = _agencia.obtenerCiudades();
             }
             table.Rows.Clear();
             foreach (var ciudad in ciudades)
             {
-                table.Rows.Add(ciudad.ID, ciudad.Nombre);
+                table.Rows.Add(ciudad.idCiudad, ciudad.nombre);
             }
         }
 
@@ -74,16 +56,16 @@ namespace AgenciaDeViajes
         {
             int index = e.RowIndex;
             DataGridViewRow row = dgv.Rows[index];
+            idCiudadSeleccionada = int.Parse(row.Cells[0].Value.ToString());
             txtID.Text = row.Cells[0].Value.ToString();
             txtNombre.Text = row.Cells[1].Value.ToString();
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            Ciudad ciudad = getScreenObject();
-            if (ciudad != null)
+            if (!String.IsNullOrEmpty(txtNombre.Text))
             {
-                bool agregado = _agencia.AgregarCiudad(ciudad.ID, ciudad.Nombre);
+                bool agregado = _agencia.AgregarCiudad(txtNombre.Text);
                 if (agregado)
                 {
                     btnLimpiar_Click(sender, e);
@@ -99,10 +81,9 @@ namespace AgenciaDeViajes
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            Ciudad ciudad = getScreenObject();
-            if (ciudad != null)
+            if (idCiudadSeleccionada != -1 && !String.IsNullOrEmpty(txtNombre.Text))
             {
-                bool modificado = _agencia.ModificarCiudad(ciudad.ID, ciudad.Nombre);
+                bool modificado = _agencia.ModificarCiudad(idCiudadSeleccionada, txtNombre.Text);
                 if (modificado)
                 {
                     Load_DataGrid();
@@ -116,10 +97,9 @@ namespace AgenciaDeViajes
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            Ciudad ciudad = getScreenObject();
-            if (ciudad != null)
+            if (idCiudadSeleccionada != -1)
             {
-                bool eliminado = _agencia.EliminarCiudad(ciudad.ID);
+                bool eliminado = _agencia.EliminarCiudad(idCiudadSeleccionada);
                 if (eliminado)
                 {
                     Load_DataGrid();
@@ -140,6 +120,7 @@ namespace AgenciaDeViajes
         {
             txtID.Text = String.Empty;
             txtNombre.Text = String.Empty;
+            idCiudadSeleccionada = -1;
         }
     }
 }

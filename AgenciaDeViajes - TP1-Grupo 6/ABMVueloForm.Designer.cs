@@ -83,6 +83,7 @@
             // 
             txtID.Location = new Point(148, 47);
             txtID.Name = "txtID";
+            txtID.ReadOnly = true;
             txtID.Size = new Size(139, 23);
             txtID.TabIndex = 19;
             // 

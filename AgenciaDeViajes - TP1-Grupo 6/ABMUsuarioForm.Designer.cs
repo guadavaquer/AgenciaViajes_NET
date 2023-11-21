@@ -45,8 +45,6 @@
             btnAgregar = new Button();
             label1 = new Label();
             txtApellido = new TextBox();
-            chkAdministrador = new CheckBox();
-            label6 = new Label();
             label7 = new Label();
             txtPassword = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
@@ -57,14 +55,14 @@
             txtNombre.Location = new Point(149, 91);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(139, 23);
-            txtNombre.TabIndex = 71;
+            txtNombre.TabIndex = 2;
             // 
             // txtMail
             // 
             txtMail.Location = new Point(398, 91);
             txtMail.Name = "txtMail";
             txtMail.Size = new Size(139, 23);
-            txtMail.TabIndex = 70;
+            txtMail.TabIndex = 5;
             // 
             // label9
             // 
@@ -80,7 +78,7 @@
             txtDNI.Location = new Point(398, 49);
             txtDNI.Name = "txtDNI";
             txtDNI.Size = new Size(139, 23);
-            txtDNI.TabIndex = 68;
+            txtDNI.TabIndex = 4;
             // 
             // label4
             // 
@@ -102,10 +100,10 @@
             // 
             // btnLimpiar
             // 
-            btnLimpiar.Location = new Point(462, 194);
+            btnLimpiar.Location = new Point(461, 217);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(75, 23);
-            btnLimpiar.TabIndex = 65;
+            btnLimpiar.TabIndex = 11;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
             btnLimpiar.Click += btnLimpiar_Click;
@@ -118,7 +116,7 @@
             dgv.AllowUserToResizeRows = false;
             dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgv.Location = new Point(67, 239);
+            dgv.Location = new Point(66, 262);
             dgv.Name = "dgv";
             dgv.RowTemplate.Height = 25;
             dgv.Size = new Size(470, 143);
@@ -129,8 +127,9 @@
             // 
             txtID.Location = new Point(149, 52);
             txtID.Name = "txtID";
+            txtID.ReadOnly = true;
             txtID.Size = new Size(139, 23);
-            txtID.TabIndex = 63;
+            txtID.TabIndex = 1;
             // 
             // label3
             // 
@@ -152,40 +151,40 @@
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(365, 194);
+            btnBuscar.Location = new Point(364, 217);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(75, 23);
-            btnBuscar.TabIndex = 60;
+            btnBuscar.TabIndex = 10;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
             btnBuscar.Click += btnBuscar_Click;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(267, 194);
+            btnEliminar.Location = new Point(266, 217);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(75, 23);
-            btnEliminar.TabIndex = 59;
+            btnEliminar.TabIndex = 9;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             btnEliminar.Click += btnEliminar_Click;
             // 
             // btnModificar
             // 
-            btnModificar.Location = new Point(167, 194);
+            btnModificar.Location = new Point(166, 217);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(75, 23);
-            btnModificar.TabIndex = 58;
+            btnModificar.TabIndex = 8;
             btnModificar.Text = "Modificar";
             btnModificar.UseVisualStyleBackColor = true;
             btnModificar.Click += btnModificar_Click;
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(67, 194);
+            btnAgregar.Location = new Point(66, 217);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(75, 23);
-            btnAgregar.TabIndex = 57;
+            btnAgregar.TabIndex = 7;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             btnAgregar.Click += btnAgregar_Click;
@@ -204,25 +203,7 @@
             txtApellido.Location = new Point(149, 131);
             txtApellido.Name = "txtApellido";
             txtApellido.Size = new Size(139, 23);
-            txtApellido.TabIndex = 72;
-            // 
-            // chkAdministrador
-            // 
-            chkAdministrador.AutoSize = true;
-            chkAdministrador.Location = new Point(156, 166);
-            chkAdministrador.Name = "chkAdministrador";
-            chkAdministrador.Size = new Size(15, 14);
-            chkAdministrador.TabIndex = 73;
-            chkAdministrador.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(67, 165);
-            label6.Name = "label6";
-            label6.Size = new Size(83, 15);
-            label6.TabIndex = 74;
-            label6.Text = "Administrador";
+            txtApellido.TabIndex = 3;
             // 
             // label7
             // 
@@ -239,17 +220,15 @@
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
             txtPassword.Size = new Size(139, 23);
-            txtPassword.TabIndex = 76;
+            txtPassword.TabIndex = 6;
             // 
             // ABMUsuarioForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(624, 407);
+            ClientSize = new Size(625, 460);
             Controls.Add(txtPassword);
             Controls.Add(label7);
-            Controls.Add(label6);
-            Controls.Add(chkAdministrador);
             Controls.Add(txtApellido);
             Controls.Add(txtNombre);
             Controls.Add(txtMail);
@@ -293,8 +272,6 @@
         private Button btnAgregar;
         private Label label1;
         private TextBox txtApellido;
-        private CheckBox chkAdministrador;
-        private Label label6;
         private Label label7;
         private TextBox txtPassword;
     }

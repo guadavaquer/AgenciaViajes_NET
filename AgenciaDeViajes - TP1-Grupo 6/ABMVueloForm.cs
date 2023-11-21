@@ -16,22 +16,27 @@ namespace AgenciaDeViajes
     {
         private Agencia _agencia;
         private DataTable table = new DataTable("table");
+
+        private int? idVueloSeleccionado;
         public ABMVueloForm(Agencia agencia)
         {
             InitializeComponent();
             _agencia = agencia;
+            idVueloSeleccionado = -1;
             MessageBox.Show("Bienvenido al formulario de gestión de Vuelos.", "ABM Vuelos", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void ABMVueloForm_Load(object sender, EventArgs e)
         {
-            List<Ciudad> ciudades = _agencia.MostrarCiudades();
+            List<Ciudad> ciudades = _agencia.obtenerCiudades();
             cmbOrigen.DataSource = ciudades;
-            cmbOrigen.DisplayMember = "Nombre";
-            cmbOrigen.ValueMember = "ID";
+            cmbOrigen.DisplayMember = "nombre";
+            cmbOrigen.ValueMember = "idCiudad";
             cmbDestino.DataSource = ciudades.ToList();
-            cmbDestino.DisplayMember = "Nombre";
-            cmbDestino.ValueMember = "ID";
+            cmbDestino.DisplayMember = "nombre";
+            cmbDestino.ValueMember = "idCiudad";
+            cmbOrigen.SelectedIndex = -1;
+            cmbDestino.SelectedIndex = -1;
 
             table.Columns.Add("ID", Type.GetType("System.Int32"));
             table.Columns.Add("Origen", Type.GetType("System.String"));
@@ -47,57 +52,30 @@ namespace AgenciaDeViajes
 
         }
 
-        private Vuelo? getScreenObject()
-        {
-            int ID = 0;
-            Int32.TryParse(txtID.Text, out ID);
-            //List<Ciudad> ciudades = _agencia.MostrarCiudades();
-            Ciudad? Origen = (Ciudad)cmbOrigen.SelectedItem; //ciudades.FirstOrDefault(c => c.ID.ToString() == cmbOrigen.SelectedValue.ToString());
-            Ciudad? Destino = (Ciudad)cmbDestino.SelectedItem; // ciudades.FirstOrDefault(c => c.ID.ToString() == cmbDestino.SelectedValue.ToString());
-            int Capacidad = 0;
-            Int32.TryParse(txtCapacidad.Text, out Capacidad);
-            double Costo = 0;
-            Double.TryParse(txtCosto.Text, out Costo);
-            DateTime Fecha = dtpFecha.Value;
-            string Aerolinea = txtAerolinea.Text;
-            String Avion = txtAvion.Text;
-
-            Vuelo vuelo = new Vuelo(ID, Capacidad,0, Costo, Fecha, Aerolinea, Avion, Origen, Destino);
-            return vuelo;
-        }
-
         private void Load_DataGrid()
         {
             List<Vuelo> vuelos;
-
-            if (String.IsNullOrEmpty(txtID.Text) && cmbOrigen.SelectedValue == null
+            if (cmbOrigen.SelectedValue == null
                 && cmbDestino.SelectedValue == null && String.IsNullOrEmpty(txtCapacidad.Text)
                 && String.IsNullOrEmpty(txtCosto.Text) && String.IsNullOrEmpty(txtAerolinea.Text)
                 && String.IsNullOrEmpty(txtAvion.Text) && dtpFecha.Value == dtpFecha.MinDate
                 )
             {
-                vuelos = _agencia.MostrarVuelos();
+                vuelos = _agencia.obtenerVuelos();
             }
             else
             {
-                int ID = 0;
-                Int32.TryParse(txtID.Text, out ID);
-                //List<Ciudad> ciudades = _agencia.MostrarCiudades();
-                int ciudadIdOrigen = cmbOrigen.SelectedValue == null? 0: Convert.ToInt32(cmbOrigen.SelectedValue);
-                int ciudadIdDestino = cmbDestino.SelectedValue == null ? 0 : Convert.ToInt32(cmbDestino.SelectedValue);
-                int Capacidad = 0;
-                Int32.TryParse(txtCapacidad.Text, out Capacidad);
-                double Costo = 0;
-                Double.TryParse(txtCosto.Text, out Costo);
-                DateTime Fecha = dtpFecha.Value;
-                string Aerolinea = txtAerolinea.Text;
-                String Avion = txtAvion.Text;
-                vuelos = _agencia.BuscarVuelos(ID, ciudadIdOrigen, ciudadIdDestino, Capacidad, Costo, Fecha, Aerolinea, Avion);          
+                int.TryParse(cmbOrigen.SelectedValue.ToString(), out int idCiudadOrigen);
+                int.TryParse(cmbDestino.SelectedValue.ToString(), out int idCiudadDestino);
+                int.TryParse(txtCapacidad.Text, out int capacidad);
+                double.TryParse(txtCosto.Text, out double costo);
+                vuelos = _agencia.obtenerVuelos(idCiudadOrigen, idCiudadDestino, capacidad, costo, dtpFecha.Value, txtAerolinea.Text, txtAvion.Text);
             }
+
             table.Rows.Clear();
             foreach (var vuelo in vuelos)
             {
-                table.Rows.Add(vuelo.ID, vuelo.Origen.Nombre, vuelo.Destino.Nombre, vuelo.Capacidad, vuelo.Costo, vuelo.Fecha, vuelo.Aerolinea, vuelo.Avion);
+                table.Rows.Add(vuelo.idVuelo, vuelo.origen.nombre, vuelo.destino.nombre, vuelo.capacidad, vuelo.costo, vuelo.fecha, vuelo.aerolinea, vuelo.avion);
             }
         }
 
@@ -105,6 +83,7 @@ namespace AgenciaDeViajes
         {
             int index = e.RowIndex;
             DataGridViewRow row = dgv.Rows[index];
+            idVueloSeleccionado = int.Parse(row.Cells[0].Value.ToString());
             txtID.Text = row.Cells[0].Value.ToString();
             cmbOrigen.SelectedIndex = cmbOrigen.FindString(row.Cells[1].Value.ToString());
             cmbDestino.SelectedIndex = cmbDestino.FindString(row.Cells[2].Value.ToString());
@@ -117,10 +96,16 @@ namespace AgenciaDeViajes
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            Vuelo vuelo = getScreenObject();
-            if (vuelo != null)
+            if (cmbOrigen.SelectedValue != null
+                && cmbDestino.SelectedValue != null && !String.IsNullOrEmpty(txtCapacidad.Text)
+                && !String.IsNullOrEmpty(txtCosto.Text) && !String.IsNullOrEmpty(txtAerolinea.Text)
+                && !String.IsNullOrEmpty(txtAvion.Text) && dtpFecha.Value != dtpFecha.MinDate)
             {
-                bool agregado = _agencia.AgregarVuelo(vuelo.ID, vuelo.Origen, vuelo.Destino, vuelo.Capacidad, vuelo.Costo, vuelo.Fecha, vuelo.Aerolinea, vuelo.Avion);
+                int.TryParse(cmbOrigen.SelectedValue.ToString(), out int idCiudadOrigen);
+                int.TryParse(cmbDestino.SelectedValue.ToString(), out int idCiudadDestino);
+                int.TryParse(txtCapacidad.Text, out int capacidad);
+                double.TryParse(txtCosto.Text, out double costo);
+                bool agregado = _agencia.AgregarVuelo(idCiudadOrigen, idCiudadDestino, capacidad, costo, dtpFecha.Value, txtAerolinea.Text, txtAvion.Text);
                 if (agregado)
                 {
                     btnLimpiar_Click(sender, e);
@@ -136,10 +121,16 @@ namespace AgenciaDeViajes
 
         private void btnModificar_Click(object sender, EventArgs e)
         {
-            Vuelo vuelo = getScreenObject();
-            if (vuelo != null)
+            if (idVueloSeleccionado != -1 && cmbOrigen.SelectedValue != null
+                && cmbDestino.SelectedValue != null && !String.IsNullOrEmpty(txtCapacidad.Text)
+                && !String.IsNullOrEmpty(txtCosto.Text) && !String.IsNullOrEmpty(txtAerolinea.Text)
+                && !String.IsNullOrEmpty(txtAvion.Text) && dtpFecha.Value != dtpFecha.MinDate)
             {
-                bool modificado = _agencia.ModificarVuelo(vuelo.ID, vuelo.Origen, vuelo.Destino, vuelo.Capacidad, vuelo.Costo, vuelo.Fecha, vuelo.Aerolinea, vuelo.Avion);
+                int.TryParse(cmbOrigen.SelectedValue.ToString(), out int idCiudadOrigen);
+                int.TryParse(cmbDestino.SelectedValue.ToString(), out int idCiudadDestino);
+                int.TryParse(txtCapacidad.Text, out int capacidad);
+                double.TryParse(txtCosto.Text, out double costo);
+                bool modificado = _agencia.ModificarVuelo(idVueloSeleccionado, idCiudadOrigen, idCiudadDestino, capacidad, costo, dtpFecha.Value, txtAerolinea.Text, txtAvion.Text);
                 if (modificado)
                 {
                     Load_DataGrid();
@@ -153,10 +144,9 @@ namespace AgenciaDeViajes
 
         private void btnEliminar_Click(object sender, EventArgs e)
         {
-            Vuelo vuelo = getScreenObject();
-            if (vuelo != null)
+            if (idVueloSeleccionado != -1)
             {
-                bool eliminado = _agencia.EliminarVuelo(vuelo.ID);
+                bool eliminado = _agencia.EliminarVuelo(idVueloSeleccionado);
                 if (eliminado)
                 {
                     Load_DataGrid();
@@ -183,6 +173,7 @@ namespace AgenciaDeViajes
             dtpFecha.Value = DateTimePicker.MinimumDateTime;
             txtAerolinea.Text = String.Empty;
             txtAvion.Text = String.Empty;
+            idVueloSeleccionado = -1;
         }
 
     }

@@ -43,14 +43,15 @@ namespace AgenciaDeViajes
             misVuelosToolStripMenuItem = new ToolStripMenuItem();
             misHotelesToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesiónToolStripMenuItem = new ToolStripMenuItem();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // btnHoteles
             // 
-            btnHoteles.Location = new Point(21, 59);
+            btnHoteles.Location = new Point(59, 147);
             btnHoteles.Name = "btnHoteles";
-            btnHoteles.Size = new Size(100, 65);
+            btnHoteles.Size = new Size(114, 65);
             btnHoteles.TabIndex = 0;
             btnHoteles.Text = "Hoteles";
             btnHoteles.UseVisualStyleBackColor = true;
@@ -58,9 +59,9 @@ namespace AgenciaDeViajes
             // 
             // btnVuelos
             // 
-            btnVuelos.Location = new Point(150, 59);
+            btnVuelos.Location = new Point(214, 147);
             btnVuelos.Name = "btnVuelos";
-            btnVuelos.Size = new Size(99, 65);
+            btnVuelos.Size = new Size(114, 65);
             btnVuelos.TabIndex = 1;
             btnVuelos.Text = "Vuelos";
             btnVuelos.UseVisualStyleBackColor = true;
@@ -68,9 +69,9 @@ namespace AgenciaDeViajes
             // 
             // btnCiudades
             // 
-            btnCiudades.Location = new Point(277, 59);
+            btnCiudades.Location = new Point(365, 147);
             btnCiudades.Name = "btnCiudades";
-            btnCiudades.Size = new Size(99, 65);
+            btnCiudades.Size = new Size(114, 65);
             btnCiudades.TabIndex = 2;
             btnCiudades.Text = "Ciudades";
             btnCiudades.UseVisualStyleBackColor = true;
@@ -81,7 +82,7 @@ namespace AgenciaDeViajes
             menuStrip1.Items.AddRange(new ToolStripItem[] { miPerfilToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(400, 24);
+            menuStrip1.Size = new Size(519, 24);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -129,11 +130,22 @@ namespace AgenciaDeViajes
             cerrarSesiónToolStripMenuItem.Text = "Cerrar Sesión";
             cerrarSesiónToolStripMenuItem.Click += cerrarSesiónToolStripMenuItem_Click;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(53, 73);
+            label1.Name = "label1";
+            label1.Size = new Size(114, 21);
+            label1.TabIndex = 4;
+            label1.Text = "Menú principal";
+            // 
             // UserForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(400, 191);
+            ClientSize = new Size(519, 321);
+            Controls.Add(label1);
             Controls.Add(btnCiudades);
             Controls.Add(btnVuelos);
             Controls.Add(btnHoteles);
@@ -159,5 +171,6 @@ namespace AgenciaDeViajes
         private ToolStripMenuItem misVuelosToolStripMenuItem;
         private ToolStripMenuItem misHotelesToolStripMenuItem;
         private ToolStripMenuItem cerrarSesiónToolStripMenuItem;
+        private Label label1;
     }
 }
