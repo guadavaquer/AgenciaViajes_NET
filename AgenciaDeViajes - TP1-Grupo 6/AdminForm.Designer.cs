@@ -91,13 +91,13 @@
             // 
             panelDeAdministradorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cerrarSesiónToolStripMenuItem });
             panelDeAdministradorToolStripMenuItem.Name = "panelDeAdministradorToolStripMenuItem";
-            panelDeAdministradorToolStripMenuItem.Size = new Size(141, 20);
-            panelDeAdministradorToolStripMenuItem.Text = "Panel de administrador";
+            panelDeAdministradorToolStripMenuItem.Size = new Size(127, 20);
+            panelDeAdministradorToolStripMenuItem.Text = "Menu administrador";
             // 
             // cerrarSesiónToolStripMenuItem
             // 
             cerrarSesiónToolStripMenuItem.Name = "cerrarSesiónToolStripMenuItem";
-            cerrarSesiónToolStripMenuItem.Size = new Size(180, 22);
+            cerrarSesiónToolStripMenuItem.Size = new Size(142, 22);
             cerrarSesiónToolStripMenuItem.Text = "Cerrar sesión";
             cerrarSesiónToolStripMenuItem.Click += cerrarSesiónToolStripMenuItem_Click;
             // 

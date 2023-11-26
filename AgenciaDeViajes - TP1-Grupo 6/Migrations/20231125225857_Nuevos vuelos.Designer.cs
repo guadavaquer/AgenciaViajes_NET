@@ -4,6 +4,7 @@ using AgenciaDeViajes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgenciaDeViajes.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231125225857_Nuevos vuelos")]
+    partial class Nuevosvuelos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,6 +119,7 @@ namespace AgenciaDeViajes.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int?>("pagado")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("idUsuario", "idHotel");
@@ -144,6 +148,7 @@ namespace AgenciaDeViajes.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("pagado")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("idUsuario", "idVuelo");

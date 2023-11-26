@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AgenciaDeViajes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,22 @@ namespace AgenciaDeViajes
 {
     public partial class CiudadesForm : Form
     {
-        public CiudadesForm(Agencia agenciaDeViajes)
+        private Agencia _agencia;
+
+        public CiudadesForm(Agencia agencia)
         {
             InitializeComponent();
+            _agencia = agencia;
+
+        }
+
+        private void CiudadesForm_Load(object sender, EventArgs e)
+        {
+            List<Ciudad> ciudades = _agencia.obtenerCiudades();
+            cmbCiudad.DataSource = ciudades;
+            cmbCiudad.DisplayMember = "nombre";
+            cmbCiudad.ValueMember = "idCiudad";
+            cmbCiudad.SelectedIndex = -1;
         }
     }
 }

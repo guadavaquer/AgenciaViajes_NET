@@ -11,6 +11,9 @@ namespace AgenciaDeViajes
         private Registrarse formRegistro;
         private AdminForm adminForm;
         private UserForm userForm;
+        private MiCreditoForm miCredito;
+        private MisReservasHotelesForm misReservasHoteles;
+        private MisReservasVuelosForm misReservasVuelos;
 
         public Form1()
         {
@@ -36,25 +39,29 @@ namespace AgenciaDeViajes
             {
                 AdminForm formAdmin = new AdminForm(agenciaDeViajes,
                 // Delegado para mostrar el formulario de Viajes
-                () => {
+                () =>
+                {
                     var abmHotelForm = new ABMHotelForm(agenciaDeViajes);
                     abmHotelForm.MdiParent = this;
                     abmHotelForm.Show();
                 },
                 // Delegado para mostrar el formulario de Usuarios
-                () => {
+                () =>
+                {
                     var abmUsuarioForm = new ABMUsuarioForm(agenciaDeViajes);
                     abmUsuarioForm.MdiParent = this;
                     abmUsuarioForm.Show();
                 },
                 // Delegado para mostrar el formulario de Ciudades
-                () => {
+                () =>
+                {
                     var abmCiudadForm = new ABMCiudadForm(agenciaDeViajes);
                     abmCiudadForm.MdiParent = this;
                     abmCiudadForm.Show();
                 },
                 // Delegado para mostrar el formulario de Vuelos
-                () => {
+                () =>
+                {
                     var abmVueloForm = new ABMVueloForm(agenciaDeViajes);
                     abmVueloForm.MdiParent = this;
                     abmVueloForm.Show();
@@ -82,13 +89,38 @@ namespace AgenciaDeViajes
                     CiudadesForm.MdiParent = this;
                     CiudadesForm.Show();
                 },
+
                 // Formulario de Vuelos
                 () =>
                 {
                     var VuelosForm = new VuelosForm(agenciaDeViajes);
                     VuelosForm.MdiParent = this;
                     VuelosForm.Show();
+                },
+
+                // Formulario de Mi credito
+                () =>
+                {
+                    var MiCreditoForm = new MiCreditoForm(agenciaDeViajes);
+                    MiCreditoForm.MdiParent = this;
+                    MiCreditoForm.Show();
+                },
+                // Formulario de Mis reservas hoteles
+                () =>
+                {
+                    var MisReservasHotelesForm = new MisReservasHotelesForm(agenciaDeViajes);
+                    MisReservasHotelesForm.MdiParent = this;
+                    MisReservasHotelesForm.Show();
+                },
+
+                // Formulario de Mis reservas vuelos
+                () =>
+                {
+                    var MisReservasVuelosForm = new MisReservasVuelosForm(agenciaDeViajes);
+                    MisReservasVuelosForm.MdiParent = this;
+                    MisReservasVuelosForm.Show();
                 }
+
                 );
                 formUser.MdiParent = this;
                 formUser.TransfInicioSesion += TransfInicioSesion;
@@ -111,7 +143,7 @@ namespace AgenciaDeViajes
         // Vuelve al formulario de inicio de sesión desde el de registro.
         private void TransfInicioSesion()
         {
-            if(formRegistro!= null)
+            if (formRegistro != null)
             {
                 formRegistro.Close();
             }

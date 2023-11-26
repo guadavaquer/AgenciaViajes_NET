@@ -22,6 +22,8 @@ namespace AgenciaDeViajes
         {
             InitializeComponent();
             _agencia = agencia;
+
+            // Inicializa la variable
             idVueloSeleccionado = -1;
             MessageBox.Show("Bienvenido al formulario de gestión de Vuelos.", "ABM Vuelos", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -65,8 +67,17 @@ namespace AgenciaDeViajes
             }
             else
             {
-                int.TryParse(cmbOrigen.SelectedValue.ToString(), out int idCiudadOrigen);
-                int.TryParse(cmbDestino.SelectedValue.ToString(), out int idCiudadDestino);
+                int idCiudadOrigen = -1;
+                int idCiudadDestino = -1;
+
+                if (cmbOrigen.SelectedValue != null)
+                {
+                    int.TryParse(cmbOrigen.SelectedValue.ToString(), out idCiudadOrigen);
+                }
+                if (cmbDestino.SelectedValue != null)
+                {
+                    int.TryParse(cmbDestino.SelectedValue.ToString(), out idCiudadDestino);
+                }
                 int.TryParse(txtCapacidad.Text, out int capacidad);
                 double.TryParse(txtCosto.Text, out double costo);
                 vuelos = _agencia.obtenerVuelos(idCiudadOrigen, idCiudadDestino, capacidad, costo, dtpFecha.Value, txtAerolinea.Text, txtAvion.Text);

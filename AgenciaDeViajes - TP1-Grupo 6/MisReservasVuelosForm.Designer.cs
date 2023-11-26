@@ -1,6 +1,6 @@
 ﻿namespace AgenciaDeViajes
 {
-    partial class CiudadesForm
+    partial class MisReservasVuelosForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,55 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            cmbCiudad = new ComboBox();
-            label2 = new Label();
             label1 = new Label();
+            dgv = new DataGridView();
+            ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
             SuspendLayout();
-            // 
-            // cmbCiudad
-            // 
-            cmbCiudad.FormattingEnabled = true;
-            cmbCiudad.Location = new Point(23, 113);
-            cmbCiudad.Name = "cmbCiudad";
-            cmbCiudad.Size = new Size(251, 23);
-            cmbCiudad.TabIndex = 24;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(23, 84);
-            label2.Name = "label2";
-            label2.Size = new Size(111, 15);
-            label2.TabIndex = 16;
-            label2.Text = "Listado de ciudades";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(23, 22);
+            label1.Location = new Point(23, 28);
             label1.Name = "label1";
-            label1.Size = new Size(56, 15);
-            label1.TabIndex = 15;
-            label1.Text = "Ciudades";
+            label1.Size = new Size(124, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Mis reservas de vuelos";
             // 
-            // CiudadesForm
+            // dgv
+            // 
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv.Location = new Point(32, 82);
+            dgv.Name = "dgv";
+            dgv.RowTemplate.Height = 25;
+            dgv.Size = new Size(506, 150);
+            dgv.TabIndex = 1;
+            // 
+            // MisReservasVuelosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(522, 213);
-            Controls.Add(cmbCiudad);
-            Controls.Add(label2);
+            ClientSize = new Size(576, 283);
+            Controls.Add(dgv);
             Controls.Add(label1);
-            Name = "CiudadesForm";
-            Text = "Ciudades";
-            Load += CiudadesForm_Load;
+            Name = "MisReservasVuelosForm";
+            Text = "MisResevasVuelos";
+            Load += MisReservasVuelosForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dgv).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private ComboBox cmbCiudad;
-        private Label label2;
+
         private Label label1;
+        private DataGridView dgv;
     }
 }

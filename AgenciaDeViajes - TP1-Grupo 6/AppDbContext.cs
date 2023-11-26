@@ -141,7 +141,6 @@ namespace AgenciaDeViajes
                     resH.Property(rh => rh.fechaHasta).HasColumnType("datetime");
                     resH.Property(rh => rh.fechaHasta).IsRequired(true);
                     resH.Property(rh => rh.pagado).HasColumnType("int");
-                    resH.Property(rh => rh.pagado).IsRequired(true);
 
                 }
                 );
@@ -154,7 +153,6 @@ namespace AgenciaDeViajes
                     resV.Property(rv => rv.idUsuario).HasColumnType("int");
                     resV.Property(rv => rv.idUsuario).IsRequired(true);
                     resV.Property(rv => rv.pagado).HasColumnType("int");
-                    resV.Property(rv => rv.pagado).IsRequired(true);
 
                 }
                 );
@@ -208,7 +206,11 @@ namespace AgenciaDeViajes
 
             modelBuilder.Entity<Vuelo>().HasData(
                 new { idVuelo = 1, capacidad = 150, costo = (double)600000, fecha= new DateTime(2023, 5, 30), aerolinea ="Aero", avion="LF-5909", idCiudadOrigen = 1, idCiudadDestino=2 },
-                new { idVuelo = 2, capacidad = 150, costo = (double)650000, fecha = new DateTime(2023, 6, 20), aerolinea = "Aero", avion = "LF-9501", idCiudadOrigen = 2, idCiudadDestino = 1 });
+                new { idVuelo = 2, capacidad = 150, costo = (double)650000, fecha = new DateTime(2023, 6, 20), aerolinea = "Aero", avion = "LF-9501", idCiudadOrigen = 2, idCiudadDestino = 1 },
+                new { idVuelo = 3, capacidad = 1, costo = (double)950000, fecha = new DateTime(2024, 8, 10), aerolinea = "Aero", avion = "LF-5958", idCiudadOrigen = 1, idCiudadDestino = 2 },
+                new { idVuelo = 4, capacidad = 1, costo = (double)900000, fecha = new DateTime(2024, 2, 24), aerolinea = "Aero", avion = "LF-5965", idCiudadOrigen = 2, idCiudadDestino = 1 },
+                new { idVuelo = 5, capacidad = 1, costo = (double)850000, fecha = new DateTime(2024, 5, 31), aerolinea = "Aero", avion = "LF-9531", idCiudadOrigen = 1, idCiudadDestino = 2 });
+
 
             modelBuilder.Entity<ReservaHotel>().HasData(
 

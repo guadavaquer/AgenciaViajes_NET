@@ -28,6 +28,15 @@
     <Compile Update="IniciarSesion.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MiCreditoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MisReservasHotelesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MisReservasVuelosForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Registrarse.cs">
       <SubType>Form</SubType>
     </Compile>

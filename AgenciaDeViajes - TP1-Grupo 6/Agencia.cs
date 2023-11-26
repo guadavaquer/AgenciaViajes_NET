@@ -26,21 +26,20 @@ namespace AgenciaDeViajes
                 //Creo un contexto
                 contexto = new AppDbContext();
 
-                
+
                 //Cargo las entidades y las trae a memoria
-                contexto.ciudades.Include(c=> c.vuelosOrigen).Include(c=>c.vuelosDestino).Include(c=>c.hoteles).Load();
+                contexto.ciudades.Include(c => c.vuelosOrigen).Include(c => c.vuelosDestino).Include(c => c.hoteles).Load();
                 contexto.reservaHoteles.Load();
                 contexto.reservaVuelos.Load();
-                contexto.usuarios.Include(u=> u.hoteles).Include(u=>u.vuelos).Include(u=>u.reservasHoteles).Include(u => u.reservasVuelos).Load();
-                contexto.vuelos.Include(v=>v.origen).Include(v=>v.destino).Include(v => v.pasajeros).Include(v=>v.reservas).Load();
-                contexto.hoteles.Include(h=>h.ciudad).Include(h=>h.usuarios).Include(h=>h.reservas).Load();
+                contexto.usuarios.Include(u => u.hoteles).Include(u => u.vuelos).Include(u => u.reservasHoteles).Include(u => u.reservasVuelos).Load();
+                contexto.vuelos.Include(v => v.origen).Include(v => v.destino).Include(v => v.pasajeros).Include(v => v.reservas).Load();
+                contexto.hoteles.Include(h => h.ciudad).Include(h => h.usuarios).Include(h => h.reservas).Load();
             }
             catch (Exception)
             {
 
             }
         }
-
 
         //Insert, update, delete y obtener de la clase Ciudad
 
@@ -132,7 +131,7 @@ namespace AgenciaDeViajes
                 Ciudad cdad = contexto.ciudades.Where(c => c.idCiudad == idCiudad).FirstOrDefault();
                 if (cdad != null)
                 {
-                    Hotel hotel = new Hotel(null,nombre, capacidad, costo, cdad);
+                    Hotel hotel = new Hotel(null, nombre, capacidad, costo, cdad);
                     cdad.hoteles.Add(hotel);
                     contexto.hoteles.Add(hotel);
                     contexto.ciudades.Update(cdad);
@@ -204,12 +203,12 @@ namespace AgenciaDeViajes
         {
             //DbSet de hoteles
             IQueryable<Hotel> query = contexto.hoteles;
-            
+
             if (nombre != null)
             {
                 query = query.Where(h => h.nombre == nombre);
             }
-             if (idCiudad != null)
+            if (idCiudad != null)
             {
                 query = query.Where(h => h.idCiudad == idCiudad);
             }
@@ -270,7 +269,7 @@ namespace AgenciaDeViajes
             catch (Exception)
             {
                 return false;
-            }           
+            }
         }
 
         //Eliminar usuario
@@ -340,7 +339,7 @@ namespace AgenciaDeViajes
                 Ciudad? cdadDestino = contexto.ciudades.Where(c => c.idCiudad == idCiudadDestino).FirstOrDefault();
                 if (cdadOrigen != null && cdadDestino != null)
                 {
-                    Vuelo vuelo = new Vuelo(null, capacidad, costo, fecha, aerolinea, avion, cdadOrigen,cdadDestino);
+                    Vuelo vuelo = new Vuelo(null, capacidad, costo, fecha, aerolinea, avion, cdadOrigen, cdadDestino);
                     cdadOrigen.vuelosOrigen.Add(vuelo);
                     cdadDestino.vuelosDestino.Add(vuelo);
                     contexto.ciudades.Update(cdadOrigen);
@@ -404,6 +403,7 @@ namespace AgenciaDeViajes
             catch (Exception)
             {
                 return false;
+                return false;
             }
         }
 
@@ -413,16 +413,17 @@ namespace AgenciaDeViajes
             //DbSet de vuelos
             return contexto.vuelos.ToList();
         }
-        public List<Vuelo> obtenerVuelos(int? idCiudadOrigen, int? idCiudadDestino, int? capacidad, double? costo, DateTime? fecha, string aerolinea, string avion)
+
+        public List<Vuelo> obtenerVuelos(int idCiudadOrigen, int idCiudadDestino, int? capacidad, double? costo, DateTime? fecha, string aerolinea, string avion)
         {
             //DbSet de vuelos
             IQueryable<Vuelo> query = contexto.vuelos;
-            
-            if (idCiudadOrigen != null)
+
+            if (idCiudadOrigen != -1)
             {
                 query = query.Where(v => v.idCiudadOrigen == idCiudadOrigen);
             }
-            if (idCiudadDestino != null)
+            if (idCiudadDestino != -1)
             {
                 query = query.Where(v => v.idCiudadDestino == idCiudadDestino);
             }
@@ -450,8 +451,61 @@ namespace AgenciaDeViajes
             return query.ToList();
         }
 
-        //Métodos de verificación clase Usuario
+        public List<Vuelo> obtenerVuelosDisponibles()
+        {
+            //DbSet de vuelos
+            return contexto.vuelos.Where(v => v.fecha > DateTime.Now && v.capacidad > v.pasajeros.Count).ToList();
+        }
 
+        public List<Vuelo> obtenerVuelosDisponibles(int idCiudadOrigen, int idCiudadDestino, DateTime? fechaDesde, DateTime? fechaHasta)
+        {
+            IQueryable<Vuelo> query = contexto.vuelos.Where(v => v.fecha > DateTime.Now && v.capacidad > v.pasajeros.Count);
+
+            if (idCiudadOrigen != -1)
+            {
+                query = query.Where(v => v.idCiudadOrigen == idCiudadOrigen);
+            }
+            if (idCiudadDestino != -1)
+            {
+                query = query.Where(v => v.idCiudadDestino == idCiudadDestino);
+            }
+            if (fechaDesde != null)
+            {
+                query = query.Where(v => v.fecha >= fechaDesde);
+            }
+            if (fechaHasta != null)
+            {
+                query = query.Where(v => v.fecha <= fechaHasta);
+            }
+
+            return query.ToList();
+        }
+
+        public List<Hotel> obtenerHotelesDisponibles(int idCiudad, DateTime? fechaDesde, DateTime? fechaHasta)
+        {
+            IQueryable<Hotel> query = contexto.hoteles;
+            //Reservas en el rango de fechas
+            if (fechaDesde != DateTime.MinValue || fechaHasta != DateTime.MinValue)
+            {
+                query = contexto.hoteles
+                .Where(h =>
+                    h.capacidad > 0 && h.capacidad >
+                    h.reservas.Count(r =>
+                        r.fechaDesde <= fechaHasta &&
+                        r.fechaHasta >= fechaDesde
+                    )
+                );
+            }
+
+            if (idCiudad != -1)
+            {
+                query = query.Where(h => h.idCiudad == idCiudad);
+            }
+
+            return query.ToList();
+        }
+
+        //Método verificación contraseña
         public bool VerificarPassword(Usuario usuario, string password)
         {
             if (EstaBloqueado(usuario))
@@ -474,18 +528,8 @@ namespace AgenciaDeViajes
                 return false;
             }
         }
-        private void ResetearIntentosFallidos(Usuario usuario)
-        {
-            usuario.intentosFallidos = 0;
-            contexto.usuarios.Update(usuario);
-            contexto.SaveChanges();
-        }
 
-        public bool EstaBloqueado(Usuario usuario)
-        {
-            return usuario.bloqueado || usuario.intentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS;
-        }
-
+        //Método incrementar intentos fallidos
         public void IncrementarIntentosFallidos(Usuario usuario)
         {
             usuario.intentosFallidos++;
@@ -497,6 +541,21 @@ namespace AgenciaDeViajes
             contexto.SaveChanges();
         }
 
+        //Método bloqueo de usuario
+        public bool EstaBloqueado(Usuario usuario)
+        {
+            return usuario.bloqueado || usuario.intentosFallidos >= Usuario.MAX_INTENTOS_FALLIDOS;
+        }
+
+        //Método reseteo intentos fallidos
+        private void ResetearIntentosFallidos(Usuario usuario)
+        {
+            usuario.intentosFallidos = 0;
+            contexto.usuarios.Update(usuario);
+            contexto.SaveChanges();
+        }
+
+        //Método desbloquear usuario
         public void DesbloquearUsuario(Usuario usuario)
         {
             usuario.bloqueado = false;
@@ -505,15 +564,6 @@ namespace AgenciaDeViajes
             contexto.SaveChanges();
         }
 
-        public void CargarCredito(Usuario usuario, double importe)
-        {
-            if (importe <= 0)
-            {
-                throw new ArgumentOutOfRangeException("El importe debe ser mayor que 0.");
-            }
-
-            usuario.credito += importe;
-        }
         public bool EsUsuarioAdmin()
         {
             if (usuarioLogueado == null)
@@ -529,32 +579,7 @@ namespace AgenciaDeViajes
             return usuarioLogueado.nombre;
         }
 
-
-        /* public List<Hotel> hoteles { get; set; }
-           public List<Vuelo> vuelos { get; set; }
-
-           private List<Usuario> usuarios;
-
-           public List<Ciudad> ciudades { get; set; }
-           public List<ReservaHotel> reservasHotel { get; set; }
-           public List<ReservaVuelo> reservasVuelos { get; set; }
-
-           private Usuario usuarioLogueado;
-
-        private DAL db;
-
-        public Agencia()
-         {
-             usuarios = new List<Usuario>();
-             ciudades = new List<Ciudad>();
-             hoteles = new List<Hotel>();
-             vuelos = new List<Vuelo>();
-             reservasHotel = new List<ReservaHotel>();
-             reservasVuelos = new List<ReservaVuelo>();
-             //db = new DAL();
-         }*/
-
-        //Métodos inicio sesión Usuario
+        //Método inicio sesión Usuario
         public bool iniciarSesion(string mail, string password)
         {
             //var usuario = usuarios.FirstOrDefault(u => u.Mail.Equals(mail));
@@ -573,202 +598,172 @@ namespace AgenciaDeViajes
             return false;
         }
 
+        //Método de cerrar sesión
         public void cerrarSesion()
         {
             usuarioLogueado = null;
         }
-        /*
-        
-        
 
-        public void CargarCredito(double importe)
+        //Método obtener crédito
+        public double? obtenerCredito()
         {
-            CargarCredito(usuarioLogueado, importe);
-        }
-
-        
-        public void Pagar(double cantidad)
-        {
-            if (cantidad <= 0)
+            try
             {
-                throw new ArgumentException("La cantidad a pagar debe ser positiva.");
+                Usuario? usuario = contexto.usuarios.Where(u => u.idUsuario == this.usuarioLogueado.idUsuario).FirstOrDefault();
+
+                return usuario.credito;
             }
-
-            if (usuarioLogueado.Credito < cantidad)
+            catch (Exception)
             {
-                throw new InvalidOperationException("No tienes suficiente crédito para realizar el pago.");
-            }
-
-            usuarioLogueado.Credito -= cantidad;
-        }
-
-
-        
-
-        public List<Usuario> obtenerUsuarios()
-         {
-             return usuarios.ToList();
-         }
-        
-
-
-        public void ReservarVuelo(int idVuelo, int personas)
-        {
-            var usuario = usuarioLogueado;
-            if (usuario == null)
-            {
-                throw new InvalidOperationException("Usuario no encontrado.");
-            }
-            var vuelo = vuelos.FirstOrDefault(v => v.ID == idVuelo);
-            if (vuelo == null)
-            {
-                throw new InvalidOperationException("Vuelo no encontrado.");
-            }
-            if (personas <= 0)
-            {
-                throw new ArgumentException("La cantidad de personas debe ser positiva.");
-            }
-            // Calculando costo total
-            double costoTotal = vuelo.Costo * personas;
-            // Creando reserva
-            var reserva = new ReservaVuelo
-            {
-                MiVuelo = vuelo,
-                MiUsuario = usuario,
-                Pagado = costoTotal
-            };
-            Pagar(costoTotal); // El usuario paga
-            vuelo.ReservarAsientos(personas); // Reserva los asientos
-            vuelo.AgregarReserva(reserva); // Agrega la reserva a la lista del vuelo
-            AgregarReservaVuelo(reserva); // Agrega la reserva a la lista del usuario
-        }
-
-        public void AgregarReservaVuelo(ReservaVuelo reserva)
-        {
-            if (reserva == null)
-            {
-                throw new ArgumentNullException(nameof(reserva), "La reserva no puede ser null.");
-            }
-
-            if (!usuarioLogueado.MisReservasVuelos.Contains(reserva))
-            {
-                usuarioLogueado.MisReservasVuelos.Add(reserva);
-            }
-            else
-            {
-                throw new InvalidOperationException("Esta reserva ya existe para el usuario.");
+                return null;
             }
         }
 
-        public void ReservarHotel(int idHotel, DateTime fechaDesde, DateTime fechaHasta)
+        //Método cargar crédito
+        public bool cargarCredito(double credito)
         {
-            var usuario = usuarioLogueado;
-            if (usuario == null)
+            try
             {
-                throw new InvalidOperationException("Usuario no encontrado.");
-            }
-            var hotel = hoteles.FirstOrDefault(h => h.idHotel == idHotel);
-            if (hotel == null)
-            {
-                throw new InvalidOperationException("Hotel no encontrado.");
-            }
-            // Verificamos las fechas
-            if (fechaDesde > fechaHasta)
-            {
-                throw new ArgumentException("La fecha de inicio no puede ser posterior a la fecha de finalización.");
-            }
-            int noches = (fechaHasta - fechaDesde).Days;
-            if (noches <= 0)
-            {
-                throw new ArgumentException("La duración de la estancia debe ser al menos de una noche.");
-            }
-            // Calculando costo total
-            double costoTotal = hotel.Costo * noches;
-            // Creando reserva usando el constructor modificado
-            var reserva = new ReservaHotel(hotel, usuario, fechaDesde, fechaHasta, costoTotal);
-            Pagar(costoTotal);
-            hotel.ReservarHabitaciones(1); // Suponiendo que cada reserva es para una habitación
-            hotel.AgregarReserva(reserva);
-            AgregarReservaHotel(reserva);
-        }
+                Usuario? usuario = contexto.usuarios.Where(u => u.idUsuario == this.usuarioLogueado.idUsuario).FirstOrDefault();
 
-        public void AgregarReservaHotel(ReservaHotel reserva)
-        {
-            if (reserva == null)
-            {
-                throw new ArgumentNullException(nameof(reserva), "La reserva no puede ser null.");
-            }
+                usuario.credito += credito;
 
-            if (!usuarioLogueado.MisReservasHoteles.Contains(reserva))
-            {
-                usuarioLogueado.MisReservasHoteles.Add(reserva);
-            }
-            else
-            {
-                throw new InvalidOperationException("Esta reserva ya existe para el usuario.");
-            }
-        }
+                contexto.usuarios.Update(usuario);
 
-        //public void ReservarHotel(int idUsuario, int idHotel, int personas, DateTime fechaDesde, DateTime fechaHasta) {  Implementación  }
-        public List<Hotel> MostrarHoteles() { return hoteles.ToList(); }
-        public List<Vuelo> MostrarVuelos() { return vuelos.ToList(); }
-        public List<Ciudad> MostrarCiudades() { return ciudades.ToList(); }
-        public List<Usuario> MostrarUsuarios() { return usuarios.ToList(); }
+                //Los cambios se guardan en la base de datos
+                contexto.SaveChanges();
 
-
-        public List<Hotel> BuscarHoteles(int ID, string Nombre, Ciudad Ubicacion, int Capacidad, double Costo)
-        {
-            return hoteles.FindAll(h => h.idHotel == ID || h.nombre == Nombre || h.Ubicacion == Ubicacion
-            || h.Capacidad == Capacidad || h.Costo == Costo).ToList();
-        }
-        public List<Hotel> BuscarHotel(
-            int? idCiudad = null,
-            int? personas = null,
-            DateTime? fechaDesde = null,
-            DateTime? fechaHasta = null,
-            double? costoMaximo = null,
-            string nombreHotel = null)
-        {
-            return hoteles.Where(hotel =>
-            {
-                // Si se proporciona idCiudad, verificamos si el hotel está en esa ciudad
-                if (idCiudad.HasValue && hotel.Ubicacion.ID != idCiudad.Value) return false;
-                // Si se proporcionan personas, verificamos si el hotel tiene suficiente capacidad disponible
-                if (personas.HasValue && (hotel.Capacidad - hotel.Vendido) < personas.Value) return false;
-                // Si se proporcionan fechas, verificamos si el hotel está disponible durante ese período
-                if (fechaDesde.HasValue && fechaHasta.HasValue && !hotel.EstaDisponible(fechaDesde.Value, fechaHasta.Value)) return false;
-                // Si se proporciona un costo máximo, verificamos si el costo del hotel es menor o igual
-                if (costoMaximo.HasValue && hotel.Costo > costoMaximo.Value) return false;
-                // Si se proporciona el nombre del hotel, verificamos si coincide o contiene el nombre dado
-                if (!string.IsNullOrEmpty(nombreHotel) && !hotel.nombre.ToLower().Contains(nombreHotel.ToLower())) return false;
-                // Si pasa todas las condiciones, el hotel es una coincidencia válida
                 return true;
-            }).ToList();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public List<Vuelo> BuscarVuelos(int ID, int ciudadIdOrigen, int ciudadIdDestino, int Capacidad, double Costo, DateTime fecha, string aerolinea, string avion)
+        //Método reservar vuelo
+        public bool reservarVuelo(int idVuelo)
         {
-            return vuelos.FindAll(v => v.ID == ID || v.Origen.ID == ciudadIdOrigen || v.Destino.ID == ciudadIdDestino
-            || v.Capacidad == Capacidad || v.Costo == Costo || v.Fecha.Date == fecha.Date || v.Aerolinea == aerolinea || v.Avion == avion).ToList();
-        }
-        public List<Ciudad> BuscarCiudad(int ciudadId, string nombre)
-        {
-            return ciudades.FindAll(c => c.ID == ciudadId || c.Nombre.Contains(nombre)).ToList();
+            try
+            {
+                Usuario? usuario = contexto.usuarios.Where(u => u.idUsuario == this.usuarioLogueado.idUsuario).FirstOrDefault();
+                if (usuario == null)
+                {
+                    throw new InvalidOperationException("Usuario no encontrado.");
+                }
+                var vuelo = contexto.vuelos.Where(v => v.idVuelo == idVuelo && v.fecha > DateTime.Now && v.capacidad > v.pasajeros.Count).FirstOrDefault();
+                if (vuelo == null)
+                {
+                    throw new InvalidOperationException("Vuelo no encontrado.");
+                }
+                if (usuario.credito < vuelo.costo)
+                {
+                    throw new InvalidOperationException("No posee suficiente crédito.");
+                }
+
+                // Creando reserva
+                usuario.credito -= vuelo.costo;
+                usuario.vuelos.Add(vuelo);
+                contexto.usuarios.Update(usuario);
+                contexto.SaveChanges();
+
+                usuario.reservasVuelos.Last<ReservaVuelo>().pagado = 1;
+                contexto.usuarios.Update(usuario);
+                contexto.SaveChanges();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public List<Usuario> BuscarUsuarios(int ID, string Nombre, string Apellido, int DNI, string Mail)
+        public bool reservarHotel(int idHotel, DateTime fechaDesde, DateTime fechaHasta)
         {
-            return usuarios.FindAll(u => u.ID == ID || u.Nombre == Nombre || u.Apellido == Apellido
-            || u.DNI == DNI || u.Mail == Mail).ToList();
+            try
+            {
+                Usuario? usuario = contexto.usuarios.Where(u => u.idUsuario == this.usuarioLogueado.idUsuario).FirstOrDefault();
+                if (usuario == null)
+                {
+                    throw new InvalidOperationException("Usuario no encontrado.");
+                }
+                if (fechaDesde == DateTime.MinValue)
+                {
+                    throw new InvalidOperationException("Se debe seleccionar una fecha desde.");
+                }
+                if (fechaHasta == DateTime.MinValue)
+                {
+                    throw new InvalidOperationException("Se debe seleccionar una fecha hasta.");
+                }
+                if (fechaDesde >= fechaHasta)
+                {
+                    throw new InvalidOperationException("La fecha desde tiene que ser menor o igual a la fecha hasta.");
+                }
+                if (fechaDesde.Date < DateTime.Now.Date)
+                {
+                    throw new InvalidOperationException("La fecha desde tiene que ser mayor o igual a la fecha de hoy.");
+                }
+                //Busco si el hotel esta disponible
+                var hotel = contexto.hoteles
+                .Where(h =>
+                    h.idHotel == idHotel &&
+                    h.capacidad > 0 && h.capacidad >
+                    h.reservas.Count(r =>
+                        r.fechaDesde <= fechaHasta &&
+                        r.fechaHasta >= fechaDesde
+                    )
+                ).ToList().FirstOrDefault();
+
+                if (hotel == null)
+                {
+                    throw new InvalidOperationException("Hotel no encontrado.");
+                }
+                int diasHospedaje = (fechaHasta.Date - fechaDesde.Date).Days;
+                if (usuario.credito < hotel.costo * diasHospedaje)
+                {
+                    throw new InvalidOperationException("No posee suficiente crédito.");
+                }
+
+                // Creando reserva
+
+                usuario.credito -= (hotel.costo* diasHospedaje);
+                usuario.hoteles.Add(hotel);
+                contexto.usuarios.Update(usuario);
+                //contexto.SaveChanges();
+
+                usuario.reservasHoteles.Last<ReservaHotel>().pagado = 1;
+                usuario.reservasHoteles.Last<ReservaHotel>().fechaDesde = fechaDesde;
+                usuario.reservasHoteles.Last<ReservaHotel>().fechaHasta = fechaHasta;
+                contexto.usuarios.Update(usuario);
+                contexto.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
-        */
+        //Método obtener reservas de vuelos
+        public List<ReservaVuelo> obtenerReservasVuelos()
+        {
+            Usuario usuario = contexto.usuarios.Where(u => u.idUsuario == usuarioLogueado.idUsuario).FirstOrDefault();
+            return usuario.reservasVuelos.ToList();
+        }
+
+        //Método obtener reservas de hoteles
+        public List<ReservaHotel> obtenerReservasHoteles()
+        {
+            Usuario usuario = contexto.usuarios.Where(u => u.idUsuario == usuarioLogueado.idUsuario).FirstOrDefault();
+            return usuario.reservasHoteles.ToList();
+        }
 
         public void cerrar()
         {
             contexto.Dispose();
         }
 
-
     }
+
 }

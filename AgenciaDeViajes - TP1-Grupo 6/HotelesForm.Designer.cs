@@ -36,14 +36,14 @@ namespace AgenciaDeViajes
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
-            label5 = new Label();
-            dateTimePickerFechaDesde = new DateTimePicker();
-            dateTimePickerFechaHasta = new DateTimePicker();
-            numericUpDownCantidadPersonas = new NumericUpDown();
-            listView1 = new ListView();
-            comboBox1 = new ComboBox();
+            dtpFechaDesde = new DateTimePicker();
+            dtpFechaHasta = new DateTimePicker();
+            cmbCiudad = new ComboBox();
             btnBuscar = new Button();
-            ((System.ComponentModel.ISupportInitialize)numericUpDownCantidadPersonas).BeginInit();
+            dgv = new DataGridView();
+            btnLimpiar = new Button();
+            btnReservar = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgv).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -67,7 +67,7 @@ namespace AgenciaDeViajes
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(144, 69);
+            label3.Location = new Point(181, 69);
             label3.Name = "label3";
             label3.Size = new Size(72, 15);
             label3.TabIndex = 2;
@@ -76,88 +76,98 @@ namespace AgenciaDeViajes
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(270, 69);
+            label4.Location = new Point(342, 69);
             label4.Name = "label4";
             label4.Size = new Size(69, 15);
             label4.TabIndex = 3;
             label4.Text = "Fecha hasta";
             // 
-            // label5
+            // dtpFechaDesde
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(388, 69);
-            label5.Name = "label5";
-            label5.Size = new Size(105, 15);
-            label5.TabIndex = 4;
-            label5.Text = "Cantidad personas";
+            dtpFechaDesde.Format = DateTimePickerFormat.Short;
+            dtpFechaDesde.Location = new Point(181, 87);
+            dtpFechaDesde.Name = "dtpFechaDesde";
+            dtpFechaDesde.Size = new Size(101, 23);
+            dtpFechaDesde.TabIndex = 9;
             // 
-            // dateTimePickerFechaDesde
+            // dtpFechaHasta
             // 
-            dateTimePickerFechaDesde.Format = DateTimePickerFormat.Short;
-            dateTimePickerFechaDesde.Location = new Point(144, 87);
-            dateTimePickerFechaDesde.Name = "dateTimePickerFechaDesde";
-            dateTimePickerFechaDesde.Size = new Size(101, 23);
-            dateTimePickerFechaDesde.TabIndex = 9;
+            dtpFechaHasta.Format = DateTimePickerFormat.Short;
+            dtpFechaHasta.Location = new Point(342, 87);
+            dtpFechaHasta.Name = "dtpFechaHasta";
+            dtpFechaHasta.Size = new Size(101, 23);
+            dtpFechaHasta.TabIndex = 10;
             // 
-            // dateTimePickerFechaHasta
+            // cmbCiudad
             // 
-            dateTimePickerFechaHasta.Format = DateTimePickerFormat.Short;
-            dateTimePickerFechaHasta.Location = new Point(270, 87);
-            dateTimePickerFechaHasta.Name = "dateTimePickerFechaHasta";
-            dateTimePickerFechaHasta.Size = new Size(101, 23);
-            dateTimePickerFechaHasta.TabIndex = 10;
-            // 
-            // numericUpDownCantidadPersonas
-            // 
-            numericUpDownCantidadPersonas.Location = new Point(392, 87);
-            numericUpDownCantidadPersonas.Name = "numericUpDownCantidadPersonas";
-            numericUpDownCantidadPersonas.Size = new Size(101, 23);
-            numericUpDownCantidadPersonas.TabIndex = 11;
-            // 
-            // listView1
-            // 
-            listView1.Location = new Point(22, 160);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(471, 150);
-            listView1.TabIndex = 12;
-            listView1.UseCompatibleStateImageBehavior = false;
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(22, 86);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(101, 23);
-            comboBox1.TabIndex = 13;
+            cmbCiudad.FormattingEnabled = true;
+            cmbCiudad.Location = new Point(22, 86);
+            cmbCiudad.Name = "cmbCiudad";
+            cmbCiudad.Size = new Size(101, 23);
+            cmbCiudad.TabIndex = 13;
             // 
             // btnBuscar
             // 
-            btnBuscar.Location = new Point(392, 125);
+            btnBuscar.Location = new Point(22, 129);
             btnBuscar.Name = "btnBuscar";
             btnBuscar.Size = new Size(101, 22);
             btnBuscar.TabIndex = 14;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
+            btnBuscar.Click += btnBuscar_Click;
             // 
-            // Hoteles
+            // dgv
+            // 
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgv.Location = new Point(22, 184);
+            dgv.MultiSelect = false;
+            dgv.Name = "dgv";
+            dgv.RowTemplate.Height = 25;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.Size = new Size(421, 146);
+            dgv.TabIndex = 15;
+            dgv.CellClick += dgv_CellClick;
+            // 
+            // btnLimpiar
+            // 
+            btnLimpiar.Location = new Point(181, 128);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(101, 23);
+            btnLimpiar.TabIndex = 16;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
+            // 
+            // btnReservar
+            // 
+            btnReservar.Location = new Point(342, 128);
+            btnReservar.Name = "btnReservar";
+            btnReservar.Size = new Size(101, 23);
+            btnReservar.TabIndex = 17;
+            btnReservar.Text = "Reservar";
+            btnReservar.UseVisualStyleBackColor = true;
+            btnReservar.Click += btnReservar_Click;
+            // 
+            // HotelesForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(526, 342);
+            ClientSize = new Size(478, 342);
+            Controls.Add(btnReservar);
+            Controls.Add(btnLimpiar);
+            Controls.Add(dgv);
             Controls.Add(btnBuscar);
-            Controls.Add(comboBox1);
-            Controls.Add(listView1);
-            Controls.Add(numericUpDownCantidadPersonas);
-            Controls.Add(dateTimePickerFechaHasta);
-            Controls.Add(dateTimePickerFechaDesde);
-            Controls.Add(label5);
+            Controls.Add(cmbCiudad);
+            Controls.Add(dtpFechaHasta);
+            Controls.Add(dtpFechaDesde);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Hoteles";
+            Name = "HotelesForm";
             Text = "Hotelescs";
-            ((System.ComponentModel.ISupportInitialize)numericUpDownCantidadPersonas).EndInit();
+            Load += HotelesForm_Load;
+            ((System.ComponentModel.ISupportInitialize)dgv).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -168,12 +178,12 @@ namespace AgenciaDeViajes
         private Label label2;
         private Label label3;
         private Label label4;
-        private Label label5;
-        private DateTimePicker dateTimePickerFechaDesde;
-        private DateTimePicker dateTimePickerFechaHasta;
-        private NumericUpDown numericUpDownCantidadPersonas;
-        private ListView listView1;
-        private ComboBox comboBox1;
+        private DateTimePicker dtpFechaDesde;
+        private DateTimePicker dtpFechaHasta;
+        private ComboBox cmbCiudad;
         private Button btnBuscar;
+        private DataGridView dgv;
+        private Button btnLimpiar;
+        private Button btnReservar;
     }
 }

@@ -40,8 +40,6 @@ namespace AgenciaDeViajes
             miCréditoToolStripMenuItem = new ToolStripMenuItem();
             misReservasDeHotelesToolStripMenuItem = new ToolStripMenuItem();
             misReservasDeVuelosToolStripMenuItem = new ToolStripMenuItem();
-            misVuelosToolStripMenuItem = new ToolStripMenuItem();
-            misHotelesToolStripMenuItem = new ToolStripMenuItem();
             cerrarSesiónToolStripMenuItem = new ToolStripMenuItem();
             label1 = new Label();
             menuStrip1.SuspendLayout();
@@ -82,13 +80,13 @@ namespace AgenciaDeViajes
             menuStrip1.Items.AddRange(new ToolStripItem[] { miPerfilToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(519, 24);
+            menuStrip1.Size = new Size(544, 24);
             menuStrip1.TabIndex = 3;
             menuStrip1.Text = "menuStrip1";
             // 
             // miPerfilToolStripMenuItem
             // 
-            miPerfilToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { miCréditoToolStripMenuItem, misReservasDeHotelesToolStripMenuItem, misReservasDeVuelosToolStripMenuItem, misVuelosToolStripMenuItem, misHotelesToolStripMenuItem, cerrarSesiónToolStripMenuItem });
+            miPerfilToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { miCréditoToolStripMenuItem, misReservasDeHotelesToolStripMenuItem, misReservasDeVuelosToolStripMenuItem, cerrarSesiónToolStripMenuItem });
             miPerfilToolStripMenuItem.Name = "miPerfilToolStripMenuItem";
             miPerfilToolStripMenuItem.Size = new Size(63, 20);
             miPerfilToolStripMenuItem.Text = "Mi perfil";
@@ -98,30 +96,21 @@ namespace AgenciaDeViajes
             miCréditoToolStripMenuItem.Name = "miCréditoToolStripMenuItem";
             miCréditoToolStripMenuItem.Size = new Size(195, 22);
             miCréditoToolStripMenuItem.Text = "Mi crédito";
+            miCréditoToolStripMenuItem.Click += miCréditoToolStripMenuItem_Click;
             // 
             // misReservasDeHotelesToolStripMenuItem
             // 
             misReservasDeHotelesToolStripMenuItem.Name = "misReservasDeHotelesToolStripMenuItem";
             misReservasDeHotelesToolStripMenuItem.Size = new Size(195, 22);
             misReservasDeHotelesToolStripMenuItem.Text = "Mis reservas de hoteles";
+            misReservasDeHotelesToolStripMenuItem.Click += misReservasDeHotelesToolStripMenuItem_Click;
             // 
             // misReservasDeVuelosToolStripMenuItem
             // 
             misReservasDeVuelosToolStripMenuItem.Name = "misReservasDeVuelosToolStripMenuItem";
             misReservasDeVuelosToolStripMenuItem.Size = new Size(195, 22);
             misReservasDeVuelosToolStripMenuItem.Text = "Mis reservas de vuelos";
-            // 
-            // misVuelosToolStripMenuItem
-            // 
-            misVuelosToolStripMenuItem.Name = "misVuelosToolStripMenuItem";
-            misVuelosToolStripMenuItem.Size = new Size(195, 22);
-            misVuelosToolStripMenuItem.Text = "Mis vuelos";
-            // 
-            // misHotelesToolStripMenuItem
-            // 
-            misHotelesToolStripMenuItem.Name = "misHotelesToolStripMenuItem";
-            misHotelesToolStripMenuItem.Size = new Size(195, 22);
-            misHotelesToolStripMenuItem.Text = "Mis hoteles";
+            misReservasDeVuelosToolStripMenuItem.Click += misReservasDeVuelosToolStripMenuItem_Click;
             // 
             // cerrarSesiónToolStripMenuItem
             // 
@@ -144,7 +133,7 @@ namespace AgenciaDeViajes
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(519, 321);
+            ClientSize = new Size(544, 321);
             Controls.Add(label1);
             Controls.Add(btnCiudades);
             Controls.Add(btnVuelos);
@@ -168,8 +157,6 @@ namespace AgenciaDeViajes
         private ToolStripMenuItem miCréditoToolStripMenuItem;
         private ToolStripMenuItem misReservasDeHotelesToolStripMenuItem;
         private ToolStripMenuItem misReservasDeVuelosToolStripMenuItem;
-        private ToolStripMenuItem misVuelosToolStripMenuItem;
-        private ToolStripMenuItem misHotelesToolStripMenuItem;
         private ToolStripMenuItem cerrarSesiónToolStripMenuItem;
         private Label label1;
     }
